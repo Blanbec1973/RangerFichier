@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public final class Catalogue {
     private static Catalogue catalogue;
     //private static File fichier;
-    private static ArrayList <String> regex = new ArrayList<>();
-    private static ArrayList <String> dossierCible = new ArrayList<>();
+    private static final ArrayList <String> regex = new ArrayList<>();
+    private static final ArrayList <String> dossierCible = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(Controle.class);
     private Catalogue(File fichier) {
         // The following code emulates slow initialization.
@@ -30,12 +30,12 @@ public final class Catalogue {
         return catalogue;
     }
     public static String parcourir(String nomFichier) {
-        Integer i = 0;
-        Boolean trouve = false;
+        int i = 0;
+        boolean trouve = false;
         logger.info("Nom fichier à parser regex : "+nomFichier);
         while (i < regex.size() && !trouve) {
             trouve = nomFichier.matches(regex.get(i));
-            logger.info("i : "+i + " " + regex.get(i)+" "+ trouve.toString());
+            logger.info("i : "+i + " " + regex.get(i)+" "+ trouve);
             i=i+1;
         }
         return trouve ? dossierCible.get(i-1) : null;
@@ -44,7 +44,7 @@ public final class Catalogue {
 
     private void remplir() {
         //TODO chargement par fichier
-        regex.add("^NDF.*\\.(pdf|jpg)$");
+        regex.add("^NDF.*\\.(pdf|jpg|JPG)$");
         dossierCible.add("C:\\Users\\heynerr\\Documents\\B-BU Grand Ouest\\NDF");
 
         regex.add("^.*31719388832.*\\.pdf$");
@@ -71,8 +71,9 @@ public final class Catalogue {
         regex.add("^.*warranty.*\\.pdf$");
         dossierCible.add("C:\\Users\\heynerr\\Documents\\0-Personnel\\Gestion\\Factures");
 
-        regex.add("^.*Facture.*\\.pdf$");
+        regex.add("^.*Facture.*\\.pdf|jpg|JPG$");
         dossierCible.add("C:\\Users\\heynerr\\Documents\\0-Personnel\\Gestion\\Factures");
+
     }
 
 
