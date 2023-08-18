@@ -44,7 +44,7 @@ public final class Catalogue {
 
     private void remplir() {
         //TODO chargement par fichier
-        regex.add("^NDF.*\\.(pdf|jpg|JPG)$");
+        regex.add("^NDF.*\\.(pdf|jpg|JPG|png)$");
         dossierCible.add("C:\\Users\\heynerr\\Documents\\B-BU Grand Ouest\\NDF");
 
         regex.add("^.*31719388832.*\\.pdf$");
@@ -71,7 +71,7 @@ public final class Catalogue {
         regex.add("^.*warranty.*\\.pdf$");
         dossierCible.add("C:\\Users\\heynerr\\Documents\\0-Personnel\\Gestion\\Factures");
 
-        regex.add("^.*Facture.*\\.pdf|jpg|JPG$");
+        regex.add("^.*Facture.*\\.(pdf|jpg|JPG)$");
         dossierCible.add("C:\\Users\\heynerr\\Documents\\0-Personnel\\Gestion\\Factures");
 
     }
