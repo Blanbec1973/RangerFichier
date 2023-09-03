@@ -8,8 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Parametres {
-    private Properties prop;
-    private static final Logger logger = LogManager.getLogger(Controle.class);
+    private final Properties prop;
+    private static final Logger logger = LogManager.getLogger(Parametres.class);
 
 
     public Parametres(String nomFichier) {

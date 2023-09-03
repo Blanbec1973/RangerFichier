@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 class ControleTest {
 
     @Test
-    public void testMain() throws ArgumentErroneException {
+    void testMain() throws ArgumentErroneException {
         // Si argument vide, on lève une exception
         ArgumentErroneException thrown = Assertions.assertThrows(ArgumentErroneException.class, () -> {
             Controle.main(null);

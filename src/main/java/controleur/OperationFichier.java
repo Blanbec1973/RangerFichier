@@ -3,50 +3,53 @@ package controleur;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+import java.sql.*;
 
 public final class OperationFichier {
     private static OperationFichier operationFichier;
     private static Path pathSource;
-
     private static Path pathCible;
-    private static final Logger logger = LogManager.getLogger(Controle.class);
+    private static final Logger logger = LogManager.getLogger(OperationFichier.class);
 
-    private OperationFichier(Path pathSource) {
+    private OperationFichier() {
         // The following code emulates slow initialization.
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
+            Thread.currentThread().interrupt();
         }
-        logger.info("pathSource : " + pathSource.toString());
-        this.pathSource = pathSource;
     }
 
-    public static OperationFichier getInstance(Path pathSource) {
+    public static OperationFichier getInstance() {
         if (operationFichier == null) {
-            operationFichier = new OperationFichier(pathSource);
+            operationFichier = new OperationFichier();
         }
         return operationFichier;
     }
 
-    public static String rechercheCible() {
-        Catalogue.getInstance(null); //TODO nom de fichier
-        String dossierCible = Catalogue.parcourir(pathSource.getFileName().toString());
-        if (dossierCible != null) pathCible = Path.of(dossierCible+"\\"+pathSource.getFileName().toString());
-        return dossierCible == null ? null : dossierCible;
+    public static void setPathSource(Path pathSource) {
+        OperationFichier.pathSource = pathSource;
+        logger.info("pathSource : {}", pathSource);
+    }
+    public static String rechercheCible(ResultSet resultset) {
+        Catalogue.getInstance();
+        Catalogue.remplir(resultset);
+        String dossierCible = Catalogue.searchTargetDirectory(pathSource.getFileName().toString());
+        if (dossierCible != null) pathCible = Path.of(dossierCible+pathSource.getFileName().toString());
+        return dossierCible;
     }
 
     public static void deplacement()  {
         try {
-            Path path = Files.move(pathSource,pathCible, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(pathSource,pathCible, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error(e.getStackTrace().toString());
+            logger.error(e.getStackTrace());
         }
 
     }
