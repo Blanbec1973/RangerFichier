@@ -11,6 +11,7 @@ public class Controle {
 
     public static void main(String[] args) throws ArgumentErroneException {
         parametres = new Parametres("config.properties");
+        logger.info("RangerFichier v{}",parametres.getProperty("version"));
         controle(args);
         OperationFichier.getInstance(Path.of(args[0]));
         String dossierCible = OperationFichier.rechercheCible();
