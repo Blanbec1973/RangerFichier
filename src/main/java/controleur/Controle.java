@@ -26,16 +26,14 @@ public class Controle {
         logger.info("Copié vers : "+dossierCible);
         javax.swing.JOptionPane.showMessageDialog(null, str.toString());
 
-        //LOGGER.log(Level.INFO, "Hello World with Log4J 2" );
-        //LOGGER.error("Problème");
     }
 
     private static void controle(String[] args) throws ArgumentErroneException {
-        logger.info("Argument reçu : "+args[0]);
-        if(args == null) {
+        if(args.length == 0) {
             logger.error(parametres.getProperty("MsgErrNoFile"));
             throw new ArgumentErroneException("Saisie erronée : chaine vide");
         }
+        logger.info("Argument reçu : "+args[0]);
     }
 
 
