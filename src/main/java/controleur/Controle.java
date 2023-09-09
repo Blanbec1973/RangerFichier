@@ -10,31 +10,41 @@ public class Controle {
     private static Parametres parametres;
 
     public static void main(String[] args) throws ArgumentErroneException {
+        //Initialisation paramètre, sgbd et check arguments :
         parametres = new Parametres("config.properties");
         logger.info("RangerFichier v{}",parametres.getProperty("version"));
         controle(args);
-        OperationFichier.getInstance(Path.of(args[0]));
-        String dossierCible = OperationFichier.rechercheCible();
+        Connexion connexion = new Connexion(parametres.getProperty("url"));
+        connexion.connect();
+        connexion.query(parametres.getProperty("sql"));
+        OperationFichier.getInstance();
+        OperationFichier.setPathSource(Path.of(args[0]));
+
+        // Recherche du dossier cible :
+        String dossierCible = OperationFichier.rechercheCible(connexion.getResultSet());
         if (dossierCible == null) {
-            logger.info(parametres.getProperty("MsgNotFound"));
+            String str = parametres.getProperty("MsgNotFound");
+            logger.info(str);
             javax.swing.JOptionPane.showMessageDialog(null, parametres.getProperty("MsgNotFound"));
+            connexion.close();
             System.exit(0);
         }
+        //Déplacement si chemin trouvé :
         OperationFichier.deplacement();
-        StringBuilder str = new StringBuilder(parametres.getProperty("MsgCopyDeb"));
-        str.append("\n"+args[0]+"\n"+parametres.getProperty("MsgVers")+"\n");
-        str.append(dossierCible);
-        logger.info("Copié vers : "+dossierCible);
-        javax.swing.JOptionPane.showMessageDialog(null, str.toString());
-
+        String str = parametres.getProperty("MsgCopyDeb") + "\n" + args[0] + "\n" + parametres.getProperty("MsgVers") + "\n" +
+                dossierCible;
+        logger.info("Copié vers : {}", dossierCible);
+        javax.swing.JOptionPane.showMessageDialog(null, str);
+        connexion.close();
     }
 
     private static void controle(String[] args) throws ArgumentErroneException {
         if(args.length == 0) {
-            logger.error(parametres.getProperty("MsgErrNoFile"));
+            String str = parametres.getProperty("MsgErrNoFile");
+            logger.error(str);
             throw new ArgumentErroneException("Saisie erronée : chaine vide");
         }
-        logger.info("Argument reçu : "+args[0]);
+        else logger.info("Argument reçu : {}", args[0]);
     }
 
 
