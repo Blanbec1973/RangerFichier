@@ -10,6 +10,7 @@ public class Controle {
     private static Parametres parametres;
 
     public static void main(String[] args) throws ArgumentErroneException {
+        System.setProperty( "file.encoding", "UTF-8" );
         //Initialisation paramètre, sgbd et check arguments :
         parametres = new Parametres("config.properties");
         logger.info("RangerFichier v{}",parametres.getProperty("version"));
