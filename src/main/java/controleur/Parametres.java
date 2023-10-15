@@ -11,7 +11,6 @@ public class Parametres {
     private final Properties prop;
     private static final Logger logger = LogManager.getLogger(Parametres.class);
 
-
     public Parametres(String nomFichier) {
         prop = new Properties();
         InputStream input = getClass().getClassLoader().getResourceAsStream(nomFichier);
@@ -22,6 +21,6 @@ public class Parametres {
             logger.error(e.getMessage());
         }
     }
-
+    public String getVersion() {return prop.getProperty("version");}
     public String getProperty(String nomProperty) {return prop.getProperty(nomProperty);}
 }

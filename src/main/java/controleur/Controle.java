@@ -13,7 +13,7 @@ public class Controle {
         System.setProperty( "file.encoding", "UTF-8" );
         //Initialisation paramètre, sgbd et check arguments :
         parametres = new Parametres("config.properties");
-        logger.info("RangerFichier v{}",parametres.getProperty("version"));
+        logger.info("RangerFichier v{}",parametres.getVersion());
         controle(args);
         Connexion connexion = new Connexion(parametres.getProperty("url"));
         connexion.connect();
