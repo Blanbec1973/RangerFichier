@@ -14,8 +14,18 @@ class ParametresTest {
 
     @Test
     void testGetProperty() {
-        String nomFichier = parametres.getProperty("MsgErrNoFile");
-        assertNotNull(nomFichier);
+        String tempString = parametres.getProperty("MsgErrNoFile");
+        assertNotNull(tempString);
+        tempString = parametres.getProperty("version");
+        assertNotNull(tempString);
+        tempString = parametres.getProperty("url");
+        assertNotNull(tempString);
+        tempString = parametres.getProperty("MsgNotFound");
+        assertNotNull(tempString);
+        tempString = parametres.getProperty("MsgCopyDeb");
+        assertNotNull(tempString);
+        tempString = parametres.getProperty("MsgVers");
+        assertNotNull(tempString);
     }
 
     @Test
