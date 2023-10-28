@@ -54,9 +54,11 @@ public final class Catalogue {
             }
 
         }
-        logger.info("Nombre de REGEX chargés : {}", regex.size());
+        logger.info("Nombre de REGEX chargés : {}", getTailleCatalogue());
     }
 
-
+    public static int getTailleCatalogue() {
+        return regex.size();
+    }
 
 }
