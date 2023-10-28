@@ -45,7 +45,7 @@ public class Connexion {
         try {
             resultSet = statement.executeQuery(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             logger.error("Erreur dans la requête : {}", sql);
             Thread.currentThread().interrupt();
         }

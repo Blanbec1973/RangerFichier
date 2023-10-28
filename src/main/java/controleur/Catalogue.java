@@ -18,7 +18,7 @@ public final class Catalogue {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage());
             Thread.currentThread().interrupt();
         }
     }

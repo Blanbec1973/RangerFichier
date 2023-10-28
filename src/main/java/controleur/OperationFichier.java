@@ -20,7 +20,7 @@ public final class OperationFichier {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage());
             Thread.currentThread().interrupt();
         }
     }
@@ -48,8 +48,7 @@ public final class OperationFichier {
         try {
             Files.move(pathSource,pathCible, StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getStackTrace());
+            logger.error(e.getMessage());
         }
 
     }
