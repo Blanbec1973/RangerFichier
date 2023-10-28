@@ -41,9 +41,7 @@ public class Controle {
 
     private static void controle(String[] args) throws ArgumentErroneException {
         if(args.length == 0) {
-            String str = parametres.getProperty("MsgErrNoFile");
-            logger.error(str);
-            throw new ArgumentErroneException("Saisie erronée : chaine vide");
+            throw new ArgumentErroneException(parametres.getProperty("MsgErrNoFile"));
         }
         else logger.info("Argument reçu : {}", args[0]);
     }

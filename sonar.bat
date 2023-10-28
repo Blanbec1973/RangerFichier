@@ -1,6 +1,1 @@
-mvn clean verify sonar:sonar \
-  -Dsonar.login=admin \
-  -Dsonar.projectKey=RangerFichier \
-  -Dsonar.projectName='RangerFichier' \
-  -Dsonar.host.url=http://localhost:9000 \
-  -Dsonar.token=sqp_8659f4bc4970c5445b125175476b54ca6d446306
+mvn clean verify sonar:sonar -Dsonar.projectKey=RangerFichier -Dsonar.projectName='RangerFichier' -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_96c5e809229f53423b2744ea89c2b8fbdf8ed3cc
