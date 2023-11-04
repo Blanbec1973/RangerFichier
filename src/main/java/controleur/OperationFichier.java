@@ -9,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 
 import java.sql.*;
 
-public final class OperationFichier {
+public class OperationFichier {
     private static OperationFichier operationFichier;
     private static Path pathSource;
     private static Path pathCible;
