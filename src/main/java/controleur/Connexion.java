@@ -8,13 +8,14 @@ import java.sql.*;
 public class Connexion {
     private final String url;
     private Connection conn = null;
-    private Statement statement=null;
+     private Statement statement=null;
     private ResultSet resultSet=null;
     private static final Logger logger = LogManager.getLogger(Connexion.class);
     public Connexion(String url) {
         this.url = url;
     }
-
+    public Connection getConn() {return conn;}
+    public Statement getStatement() {return statement;}
     public void connect() {
         try {
             conn = DriverManager.getConnection(url);
@@ -26,9 +27,7 @@ public class Connexion {
             Thread.currentThread().interrupt();
         }
     }
-    public ResultSet getResultSet() {
-        return resultSet;
-    }
+    public ResultSet getResultSet() {return resultSet;}
     public void close() {
         try {
             if (conn != null) {
@@ -40,7 +39,6 @@ public class Connexion {
             Thread.currentThread().interrupt();
         }
     }
-
     public void query(String sql) {
         try {
             resultSet = statement.executeQuery(sql);
