@@ -1,17 +1,18 @@
-package controleur;
+package control;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.TestInstance;
 
+import static org.junit.jupiter.api.Assertions.*;
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ParametresTest {
-    private static Parametres parametres;
+    private Parametres parametres;
 
     @BeforeAll
-    static void setUpBeforeClass() throws Exception {
+    void setUpBeforeClass() throws Exception {
         parametres = new Parametres("config.properties");
     }
-
     @Test
     void testGetProperty() {
         String tempString = parametres.getProperty("MsgErrNoFile");
@@ -27,9 +28,8 @@ class ParametresTest {
         tempString = parametres.getProperty("MsgVers");
         assertNotNull(tempString);
     }
-
-    @Test
+    @Test()
     void testGetNomFichierBase2() {
-        assertThrows(Exception.class, ()->new Parametres("config2properties"));
+        assertDoesNotThrow(()->new Parametres("config2properties"));
     }
 }

@@ -1,4 +1,4 @@
-package controleur;
+package control;
 
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;

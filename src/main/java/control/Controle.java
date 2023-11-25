@@ -1,20 +1,31 @@
-package controleur;
+package control;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.nio.file.Path;
 
 
 public class Controle {
     private static final Logger logger = LogManager.getLogger(Controle.class);
-    private static Parametres parametres;
+    private Parametres parametres;
 
-    public static void main(String[] args) throws ArgumentErroneException {
+    public static void main(String[] args) {
+        new Controle(args,new OptionPane());
+    }
+
+    public Controle(String[] args, OptionPane jOptionPane) {
+
         System.setProperty( "file.encoding", "UTF-8" );
         //Initialisation paramètre, sgbd et check arguments :
         parametres = new Parametres("config.properties");
         logger.info("RangerFichier v{}",parametres.getVersion());
-        controle(args);
+        try {
+            checkArgs(args);
+        }
+        catch (ArgumentErroneException exception) {
+            System.exit(-1);
+        }
         Connexion connexion = new Connexion(parametres.getProperty("url"));
         connexion.connect();
         connexion.query(parametres.getProperty("sql"));
@@ -26,7 +37,7 @@ public class Controle {
         if (dossierCible == null) {
             String str = parametres.getProperty("MsgNotFound");
             logger.info(str);
-            javax.swing.JOptionPane.showMessageDialog(null, parametres.getProperty("MsgNotFound"));
+            jOptionPane.showMessageDialog(parametres.getProperty("MsgNotFound"));
             connexion.close();
             System.exit(0);
         }
@@ -35,11 +46,11 @@ public class Controle {
         String str = parametres.getProperty("MsgCopyDeb") + "\n" + args[0] + "\n" + parametres.getProperty("MsgVers") + "\n" +
                 dossierCible;
         logger.info("Copié vers : {}", dossierCible);
-        javax.swing.JOptionPane.showMessageDialog(null, str);
+        jOptionPane.showMessageDialog(str);
         connexion.close();
     }
 
-    private static void controle(String[] args) throws ArgumentErroneException {
+    private void checkArgs(String[] args) throws ArgumentErroneException {
         if(args.length == 0) {
             throw new ArgumentErroneException(parametres.getProperty("MsgErrNoFile"));
         }

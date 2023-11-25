@@ -1,4 +1,4 @@
-package controleur;
+package control;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +11,7 @@ import java.sql.*;
 
 public class OperationFichier {
     private static OperationFichier operationFichier;
+
     private static Path pathSource;
     private static Path pathCible;
     private static final Logger logger = LogManager.getLogger(OperationFichier.class);
@@ -35,6 +36,9 @@ public class OperationFichier {
     public static void setPathSource(Path pathSource) {
         OperationFichier.pathSource = pathSource;
         logger.info("pathSource : {}", pathSource);
+    }
+    public static Path getPathSource() {
+        return pathSource;
     }
     public static String rechercheCible(ResultSet resultset) {
         Catalogue.getInstance();

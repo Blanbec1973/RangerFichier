@@ -1,10 +1,9 @@
-package controleur;
+package control;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
@@ -28,14 +27,12 @@ class OperationFichierTest {
     @BeforeAll
     static void beforeAll() throws IOException {
         OperationFichier.getInstance();
-        System.out.println("Avant création dossier/fichier");
         TEMP_DIR.mkdirs();
         TEMP_DIR2.mkdirs();
         File file = new File(TEMP_DIR,FILE_NAME);
         OutputStream outputStream = new FileOutputStream(file);
         outputStream.write(FILE_NAME.getBytes());
         outputStream.close();
-        System.out.println("Apres création dossier/fichier");
     }
 
     @AfterAll
@@ -52,6 +49,7 @@ class OperationFichierTest {
     @Order(1)
     void setPathSource() {
         OperationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
+        assertEquals(Path.of("target\\temp\\dumpfile.txt"),OperationFichier.getPathSource());
     }
 
     @Test

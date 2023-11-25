@@ -1,27 +1,21 @@
-package controleur;
+package control;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-
+@Order(1)
 class CatalogueTest {
     private ResultSet resultSet = Mockito.mock(ResultSet.class);
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     void getInstance() {
+        assertNotNull(Catalogue.getInstance());
         assertNotNull(Catalogue.getInstance());
     }
 
@@ -37,7 +31,6 @@ class CatalogueTest {
     }
     @Test
     void searchTargetDirectory() {
-        // TODO Create test searchTargetDirectory
         assertNull(Catalogue.searchTargetDirectory("Toto"));
         assertEquals("Dossier", Catalogue.searchTargetDirectory("NDF Richard.pdf"));
     }

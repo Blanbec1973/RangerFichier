@@ -1,4 +1,4 @@
-package controleur;
+package control;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,25 +8,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-public final class Catalogue {
+public class Catalogue {
     private static Catalogue catalogue;
     private static final ArrayList <String> regex = new ArrayList<>();
     private static final ArrayList <String> dossierCible = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(Catalogue.class);
-    private Catalogue() {
-        // The following code emulates slow initialization.
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            logger.error(ex.getMessage());
-            Thread.currentThread().interrupt();
-        }
-    }
+    private Catalogue() {}
     public static Catalogue getInstance() {
-        if (catalogue == null) {
-            catalogue = new Catalogue();
+        Catalogue instance = catalogue;
+        if (instance != null) {
+            return instance;
         }
-        return catalogue;
+        synchronized (Catalogue.class) {
+            if (catalogue == null) catalogue = new Catalogue();
+            return catalogue;
+        }
     }
     public static String searchTargetDirectory(String nomFichier) {
         int i = 0;
