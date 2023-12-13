@@ -85,7 +85,7 @@
             <version>0.8.6</version>
             <configuration>
                 <excludes>
-                    <exclude>org/heyner/RangerFichier/control/OptionPane.class</exclude>
+                    <exclude>control/OptionPane.class</exclude>
                 </excludes>
             </configuration>
             <executions>
