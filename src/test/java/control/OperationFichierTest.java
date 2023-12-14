@@ -49,7 +49,7 @@ class OperationFichierTest {
     @Order(1)
     void setPathSource() {
         OperationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-        assertEquals(Path.of("target\\temp\\dumpfile.txt"),OperationFichier.getPathSource());
+        assertEquals(Path.of("target/temp/dumpfile.txt"),OperationFichier.getPathSource());
     }
 
     @Test
