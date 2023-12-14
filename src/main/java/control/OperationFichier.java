@@ -11,26 +11,22 @@ import java.sql.*;
 
 public class OperationFichier {
     private static OperationFichier operationFichier;
-
     private static Path pathSource;
     private static Path pathCible;
     private static final Logger logger = LogManager.getLogger(OperationFichier.class);
 
-    private OperationFichier() {
-        // The following code emulates slow initialization.
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            logger.error(ex.getMessage());
-            Thread.currentThread().interrupt();
-        }
-    }
+    private OperationFichier() {}
 
     public static OperationFichier getInstance() {
-        if (operationFichier == null) {
-            operationFichier = new OperationFichier();
+        OperationFichier instance = operationFichier;
+        if (instance != null) {
+            return instance;
         }
-        return operationFichier;
+        synchronized (OperationFichier.class) {
+            if (operationFichier == null)
+                operationFichier = new OperationFichier();
+            return operationFichier;
+        }
     }
 
     public static void setPathSource(Path pathSource) {
