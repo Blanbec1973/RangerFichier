@@ -56,10 +56,11 @@ class OperationFichierTest {
     @Test
     @Order(2)
     void rechercheCible() {
-        MockedStatic<Catalogue> catalogueMock = mockStatic(Catalogue.class);
-        catalogueMock.when(Catalogue::getInstance).thenReturn(catalogue);
-        when(Catalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
-        assertEquals("target/temp2/", operationFichier.rechercheCible(null));
+        try (MockedStatic<Catalogue> catalogueMock = mockStatic(Catalogue.class)) {
+            catalogueMock.when(Catalogue::getInstance).thenReturn(catalogue);
+            when(Catalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
+            assertEquals("target/temp2/", operationFichier.rechercheCible(null));
+        }
     }
 
     @Test
