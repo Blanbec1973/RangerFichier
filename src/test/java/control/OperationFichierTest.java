@@ -49,8 +49,8 @@ class OperationFichierTest {
     @Test
     @Order(1)
     void setPathSource() {
-        OperationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-        assertEquals(Path.of("target/temp/dumpfile.txt"),OperationFichier.getPathSource());
+        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
+        assertEquals(Path.of("target/temp/dumpfile.txt"),operationFichier.getPathSource());
     }
 
     @Test
@@ -59,13 +59,13 @@ class OperationFichierTest {
         MockedStatic<Catalogue> catalogueMock = mockStatic(Catalogue.class);
         catalogueMock.when(Catalogue::getInstance).thenReturn(catalogue);
         when(Catalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
-        assertEquals("target/temp2/", OperationFichier.rechercheCible(null));
+        assertEquals("target/temp2/", operationFichier.rechercheCible(null));
     }
 
     @Test
     @Order(3)
     void deplacement() {
-        OperationFichier.deplacement();
+        operationFichier.deplacement();
         File file = new File(TEMP_DIR2+"/"+FILE_NAME);
         assertTrue(file.exists());
         File file2 = new File(TEMP_DIR+"/"+FILE_NAME);

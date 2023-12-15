@@ -29,10 +29,11 @@ public class Controle {
         Connexion connexion = new Connexion(parametres.getProperty("url"));
         connexion.connect();
         connexion.query(parametres.getProperty("sql"));
-        OperationFichier.setPathSource(Path.of(args[0]));
+        OperationFichier operationFichier = new OperationFichier();
+        operationFichier.setPathSource(Path.of(args[0]));
 
         // Recherche du dossier cible :
-        String dossierCible = OperationFichier.rechercheCible(connexion.getResultSet());
+        String dossierCible = operationFichier.rechercheCible(connexion.getResultSet());
         if (dossierCible == null) {
             String str = parametres.getProperty("MsgNotFound");
             logger.info(str);
@@ -41,7 +42,7 @@ public class Controle {
             System.exit(0);
         }
         //Déplacement si chemin trouvé :
-        OperationFichier.deplacement();
+        operationFichier.deplacement();
         String str = parametres.getProperty("MsgCopyDeb") + "\n" + args[0] + "\n" + parametres.getProperty("MsgVers") + "\n" +
                 dossierCible;
         logger.info("Copié vers : {}", dossierCible);
