@@ -3,9 +3,6 @@ package control;
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ConnexionTest {
@@ -37,6 +34,7 @@ class ConnexionTest {
     void getResultSet() throws SQLException {
         connexion.getResultSet().next();
         int nbLignes = connexion.getResultSet().getInt(1);
+        System.out.println("nblignes : "+nbLignes);
         Assertions.assertTrue(nbLignes>10);
     }
 }
