@@ -39,6 +39,8 @@ public class Catalogue {
 
 
     public static void remplir(ResultSet resultSet) {
+        regex.clear();
+        dossierCible.clear();
         while (true) {
             try {
                 if (!resultSet.next()) break;
