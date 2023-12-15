@@ -29,7 +29,6 @@ public class Controle {
         Connexion connexion = new Connexion(parametres.getProperty("url"));
         connexion.connect();
         connexion.query(parametres.getProperty("sql"));
-        OperationFichier.getInstance();
         OperationFichier.setPathSource(Path.of(args[0]));
 
         // Recherche du dossier cible :

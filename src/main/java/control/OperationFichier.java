@@ -10,24 +10,9 @@ import java.nio.file.StandardCopyOption;
 import java.sql.*;
 
 public class OperationFichier {
-    private static OperationFichier operationFichier;
     private static Path pathSource;
     private static Path pathCible;
     private static final Logger logger = LogManager.getLogger(OperationFichier.class);
-
-    private OperationFichier() {}
-
-    public static OperationFichier getInstance() {
-        OperationFichier instance = operationFichier;
-        if (instance != null) {
-            return instance;
-        }
-        synchronized (OperationFichier.class) {
-            if (operationFichier == null)
-                operationFichier = new OperationFichier();
-            return operationFichier;
-        }
-    }
 
     public static void setPathSource(Path pathSource) {
         OperationFichier.pathSource = pathSource;

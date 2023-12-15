@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OperationFichierTest {
     /** Temporary area. */
+    private static OperationFichier operationFichier;
     private static final File TEMP_DIR = new File("target/temp");
     private static final File TEMP_DIR2 = new File("target/temp2");
     /** Name of the temporary XML file. */
@@ -26,7 +27,7 @@ class OperationFichierTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        OperationFichier.getInstance();
+        operationFichier = new OperationFichier();
         TEMP_DIR.mkdirs();
         TEMP_DIR2.mkdirs();
         File file = new File(TEMP_DIR,FILE_NAME);
