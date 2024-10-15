@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class Controle {
     private static final Logger logger = LogManager.getLogger(Controle.class);
-    private Parametres parametres;
+    private final org.heyner.common.Parameter parametres;
 
     public static void main(String[] args) {
         new Controle(args,new OptionPane());
@@ -18,7 +18,7 @@ public class Controle {
 
         System.setProperty( "file.encoding", "UTF-8" );
         //Initialisation paramètre, sgbd et check arguments :
-        parametres = new Parametres("config.properties");
+        parametres = new org.heyner.common.Parameter("config.properties");
         logger.info("RangerFichier v{}",parametres.getVersion());
         try {
             checkArgs(args);
