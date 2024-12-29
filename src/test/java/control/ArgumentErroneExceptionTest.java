@@ -11,7 +11,7 @@ class ArgumentErroneExceptionTest {
     @ExpectSystemExitWithStatus(-1)
     void testExpectedException() {
         String [] args = {};
-        SystemExitPreventedException thrown = assertThrows(SystemExitPreventedException.class, () -> {
+        assertThrows(SystemExitPreventedException.class, () -> {
             Controle.main(args);
                 });
     }

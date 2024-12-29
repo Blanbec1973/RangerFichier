@@ -38,7 +38,7 @@ class ControleTest {
     void testControleVide() throws ArgumentErroneException {
         String [] argumentVide = new String[0];
         // Si argument vide, on lève une exception
-        SystemExitPreventedException thrown = Assertions.assertThrows(SystemExitPreventedException.class, () -> {
+        Assertions.assertThrows(SystemExitPreventedException.class, () -> {
             new Controle(argumentVide, jOptionPane);
         });
     }
@@ -58,10 +58,12 @@ class ControleTest {
     void testControle2() {
         doAnswer(invocation -> {
             String msg = invocation.getArgument(0);
-            assertEquals("Déplacement du fichier :\n" +
-                    "target/temp/in/toto.txt\n" +
-                    "Vers le dossier :\n" +
-                    "target/temp/out/", msg);
+            String expected = """
+                    Déplacement du fichier :
+                    target/temp/in/toto.txt
+                    Vers le dossier :
+                    target/temp/out/""";
+            assertEquals(expected, msg);
             return null;
         }).when(jOptionPane).showMessageDialog(any(String.class));
 
