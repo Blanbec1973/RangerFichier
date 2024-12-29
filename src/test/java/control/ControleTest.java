@@ -35,7 +35,7 @@ class ControleTest {
     }
     @Test
     @ExpectSystemExitWithStatus(-1)
-    void testControleVide() throws ArgumentErroneException {
+    void testControleVide() {
         String [] argumentVide = new String[0];
         // Si argument vide, on lève une exception
         Assertions.assertThrows(SystemExitPreventedException.class, () -> {
