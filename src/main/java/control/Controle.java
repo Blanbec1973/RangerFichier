@@ -26,7 +26,8 @@ public class Controle {
         catch (ArgumentErroneException exception) {
             System.exit(-1);
         }
-        logger.info("url SGBD : {}",parametres.getProperty("url"));
+        if (logger.isInfoEnabled())
+            logger.info("url SGBD : {}",parametres.getProperty("url"));
         Connexion connexion = new Connexion(parametres.getProperty("url"));
         connexion.connect();
         connexion.query(parametres.getProperty("sql"));
