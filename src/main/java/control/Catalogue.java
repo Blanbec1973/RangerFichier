@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class Catalogue {
     private static Catalogue catalogue;
-    private static final ArrayList <String> regex = new ArrayList<>();
-    private static final ArrayList <String> dossierCible = new ArrayList<>();
+    private final ArrayList <String> regex = new ArrayList<>();
+    private final ArrayList <String> dossierCible = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(Catalogue.class);
     private Catalogue() {}
     public static Catalogue getInstance() {
@@ -24,28 +24,28 @@ public class Catalogue {
             return catalogue;
         }
     }
-    public static String searchTargetDirectory(String nomFichier) {
+    public String searchTargetDirectory(String nomFichier) {
         int i = 0;
         boolean trouve = false;
         logger.info("Nom fichier à parser regex : {}", nomFichier);
-        while (i < regex.size() && !trouve) {
-            trouve = nomFichier.matches(regex.get(i));
-            String str = "i : "+i + " " + regex.get(i)+" "+ trouve;
+        while (i < this.regex.size() && !trouve) {
+            trouve = nomFichier.matches(this.regex.get(i));
+            String str = "i : "+i + " " + this.regex.get(i)+" "+ trouve;
             logger.info(str);
             i=i+1;
         }
-        return trouve ? dossierCible.get(i-1) : null;
+        return trouve ? this.dossierCible.get(i-1) : null;
     }
 
 
-    public static void remplir(ResultSet resultSet) {
-        regex.clear();
-        dossierCible.clear();
+    public void remplir(ResultSet resultSet) {
+        this.regex.clear();
+        this.dossierCible.clear();
         while (true) {
             try {
                 if (!resultSet.next()) break;
-                regex.add(resultSet.getString("REGEX"));
-                dossierCible.add(resultSet.getString("DOSSIERDEST"));
+                this.regex.add(resultSet.getString("REGEX"));
+                this.dossierCible.add(resultSet.getString("DOSSIERDEST"));
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 Thread.currentThread().interrupt();
@@ -55,8 +55,8 @@ public class Catalogue {
         logger.info("Nombre de REGEX chargés : {}", getTailleCatalogue());
     }
 
-    public static int getTailleCatalogue() {
-        return regex.size();
+    public int getTailleCatalogue() {
+        return this.regex.size();
     }
 
 }

@@ -1,11 +1,12 @@
 package control;
 
+import exceptions.DatabaseAccessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
-public class Connexion {
+public class Connexion implements AutoCloseable {
     private final String url;
     private Connection conn = null;
      private Statement statement=null;
@@ -23,11 +24,14 @@ public class Connexion {
             statement= conn.createStatement();
 
         } catch (SQLException e) {
-            logger.error(e.getMessage());
-            Thread.currentThread().interrupt();
+            logger.error("Erreur de connexion à la base : {}", e.getMessage());
+            throw new DatabaseAccessException("Impossible de se connecter à la base", e);
+
         }
     }
     public ResultSet getResultSet() {return resultSet;}
+
+    @Override
     public void close() {
         try {
             if (conn != null) {
@@ -35,17 +39,17 @@ public class Connexion {
                 logger.info("Connection closed.");
             }
         } catch (SQLException ex) {
-            logger.error(ex.getMessage());
-            Thread.currentThread().interrupt();
+            logger.error("Erreur lors de la fermeture de la connexion : {}", ex.getMessage());
+            throw new DatabaseAccessException("Erreur lors de la fermeture de la connexion", ex);
         }
     }
     public void query(String sql) {
         try {
             resultSet = statement.executeQuery(sql);
         } catch (SQLException e) {
-            logger.error(e.getMessage());
             logger.error("Erreur dans la requête : {}", sql);
-            Thread.currentThread().interrupt();
+            throw new DatabaseAccessException("Erreur lors de l'exécution de la requête", e);
+
         }
     }
 

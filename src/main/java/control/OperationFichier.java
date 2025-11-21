@@ -7,8 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import java.sql.*;
-
 public class OperationFichier {
     private Path pathSource;
     private Path pathCible;
@@ -21,20 +19,18 @@ public class OperationFichier {
     public Path getPathSource() {
         return pathSource;
     }
-    public String rechercheCible(ResultSet resultset) {
-        Catalogue.getInstance();
-        Catalogue.remplir(resultset);
-        String dossierCible = Catalogue.searchTargetDirectory(pathSource.getFileName().toString());
+    public String rechercheCible(Catalogue catalogue) {
+        String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
         if (dossierCible != null) pathCible = Path.of(dossierCible+pathSource.getFileName().toString());
         return dossierCible;
     }
 
     public void deplacement()  {
         try {
-            Files.move(pathSource,pathCible, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(pathSource, pathCible, StandardCopyOption.REPLACE_EXISTING);
+            logger.info("Fichier déplacé : {} -> {}", pathSource, pathCible);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Échec du déplacement de {} vers {} : {}", pathSource, pathCible, e.getMessage());
         }
-
     }
 }

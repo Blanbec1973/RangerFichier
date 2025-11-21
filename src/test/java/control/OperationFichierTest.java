@@ -23,7 +23,7 @@ class OperationFichierTest {
     /** Name of the temporary XML file. */
     private static final String FILE_NAME = "dumpfile.txt";
     @Mock
-    private Catalogue catalogue ;
+    private Catalogue mockCatalogue;
 
     @BeforeAll
     static void beforeAll() throws IOException {
@@ -56,10 +56,11 @@ class OperationFichierTest {
     @Test
     @Order(2)
     void rechercheCible() {
+        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
         try (MockedStatic<Catalogue> catalogueMock = mockStatic(Catalogue.class)) {
-            catalogueMock.when(Catalogue::getInstance).thenReturn(catalogue);
-            when(Catalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
-            assertEquals("target/temp2/", operationFichier.rechercheCible(null));
+            catalogueMock.when(Catalogue::getInstance).thenReturn(mockCatalogue);
+            when(Catalogue.getInstance().searchTargetDirectory(any())).thenReturn("target/temp2/");
+            assertEquals("target/temp2/", operationFichier.rechercheCible(Catalogue.getInstance()));
         }
     }
 
