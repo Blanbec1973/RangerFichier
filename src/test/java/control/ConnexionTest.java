@@ -1,7 +1,10 @@
 package control;
 
+import exceptions.DatabaseAccessException;
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -35,6 +38,31 @@ class ConnexionTest {
         connexion.getResultSet().next();
         int nbLignes = connexion.getResultSet().getInt(1);
         System.out.println("nblignes : "+nbLignes);
-        Assertions.assertTrue(nbLignes>10);
+        assertTrue(nbLignes>10);
+    }
+    @Test
+    void testConnectWithInvalidUrl() {
+        Connexion connexion = new Connexion("jdbc:sqlite:/invalid/path/to/db");
+        DatabaseAccessException exception = assertThrows(DatabaseAccessException.class, connexion::connect);
+        assertTrue(exception.getMessage().contains("Impossible de se connecter"));
+    }
+
+    @Test
+    void testCloseWithoutConnect() {
+        Connexion connexion = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        // Should not throw exception even if not connected
+        assertDoesNotThrow(connexion::close);
+    }
+
+    @Test
+    void testQueryInvalidSql() {
+        Connexion connexion = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        connexion.connect();
+        DatabaseAccessException exception = assertThrows(DatabaseAccessException.class,
+                () -> connexion.query("SELECT * FROM table_inexistante"));
+        assertTrue(exception.getMessage().contains("Erreur lors de l'exécution"));
+        connexion.close();
     }
 }
+
+
