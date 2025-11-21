@@ -42,26 +42,26 @@ class ConnexionTest {
     }
     @Test
     void testConnectWithInvalidUrl() {
-        Connexion connexion = new Connexion("jdbc:sqlite:/invalid/path/to/db");
-        DatabaseAccessException exception = assertThrows(DatabaseAccessException.class, connexion::connect);
+        Connexion connexion2 = new Connexion("jdbc:sqlite:/invalid/path/to/db");
+        DatabaseAccessException exception = assertThrows(DatabaseAccessException.class, connexion2::connect);
         assertTrue(exception.getMessage().contains("Impossible de se connecter"));
     }
 
     @Test
     void testCloseWithoutConnect() {
-        Connexion connexion = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        Connexion connexion2 = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
         // Should not throw exception even if not connected
-        assertDoesNotThrow(connexion::close);
+        assertDoesNotThrow(connexion2::close);
     }
 
     @Test
     void testQueryInvalidSql() {
-        Connexion connexion = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
-        connexion.connect();
+        Connexion connexion2 = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        connexion2.connect();
         DatabaseAccessException exception = assertThrows(DatabaseAccessException.class,
-                () -> connexion.query("SELECT * FROM table_inexistante"));
+                () -> connexion2.query("SELECT * FROM table_inexistante"));
         assertTrue(exception.getMessage().contains("Erreur lors de l'exécution"));
-        connexion.close();
+        connexion2.close();
     }
 }
 
