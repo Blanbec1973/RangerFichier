@@ -1,4 +1,4 @@
-package control;
+package model;
 
 import exceptions.DatabaseAccessException;
 import org.apache.logging.log4j.LogManager;
@@ -44,12 +44,14 @@ public class Connexion implements AutoCloseable {
         }
     }
     public void query(String sql) {
+        if (statement == null) {
+            throw new DatabaseAccessException("Connexion non établie avant la requête", new IllegalStateException());
+        }
         try {
             resultSet = statement.executeQuery(sql);
         } catch (SQLException e) {
             logger.error("Erreur dans la requête : {}", sql);
             throw new DatabaseAccessException("Erreur lors de l'exécution de la requête", e);
-
         }
     }
 

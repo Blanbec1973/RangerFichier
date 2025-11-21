@@ -1,6 +1,7 @@
-package control;
+package model;
 
 import exceptions.DatabaseAccessException;
+import model.Connexion;
 import org.junit.jupiter.api.*;
 import java.sql.SQLException;
 
@@ -62,6 +63,32 @@ class ConnexionTest {
                 () -> connexion2.query("SELECT * FROM table_inexistante"));
         assertTrue(exception.getMessage().contains("Erreur lors de l'exécution"));
         connexion2.close();
+    }
+    @Test
+    void testCloseAfterConnect() {
+        Connexion connexion2 = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        connexion2.connect();
+        assertDoesNotThrow(connexion2::close);
+    }
+
+    @Test
+    void testInitialState() {
+        Connexion connexion2 = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        assertNull(connexion2.getConn());
+        assertNull(connexion2.getStatement());
+    }
+    @Test
+    void testQueryBeforeConnect() {
+        Connexion connexion2 = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        assertThrows(DatabaseAccessException.class,
+                () -> connexion2.query("SELECT * FROM REGLES"));
+    }
+    @Test
+    void testCloseMultipleTimes() {
+        Connexion connexion2 = new Connexion("jdbc:sqlite:src/main/resources/RangerFichier.db");
+        connexion2.connect();
+        connexion2.close();
+        assertDoesNotThrow(connexion2::close);
     }
 }
 

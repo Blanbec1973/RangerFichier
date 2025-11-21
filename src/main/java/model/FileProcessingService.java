@@ -1,0 +1,72 @@
+package model;
+
+import exceptions.DatabaseAccessException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.heyner.common.Parameter;
+
+public class FileProcessingService {
+    private static final Logger logger = LogManager.getLogger(FileProcessingService.class);
+    private final Parameter parametres;
+
+    public FileProcessingService(Parameter parametres) {
+        this.parametres = parametres;
+    }
+
+    /**
+     * Charge le catalogue en utilisant une connexion injectée (facilite les tests).
+     */
+    public void loadCatalogue(Connexion connexion) {
+        try {
+            connexion.connect();
+            connexion.query(parametres.getProperty("sql"));
+            Catalogue.getInstance().remplir(connexion.getResultSet());
+            logger.info("Catalogue chargé avec {} règles", Catalogue.getInstance().getTailleCatalogue());
+        } catch (DatabaseAccessException e) {
+            logger.error("Erreur critique : {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Version pratique pour la production (crée la connexion automatiquement).
+     */
+    public void loadCatalogue() {
+        try (Connexion connexion = new Connexion(parametres.getProperty("url"))) {
+            loadCatalogue(connexion);
+        }
+    }
+
+    /**
+     * Traite les fichiers et retourne un rapport.
+     */
+    public String processFiles(String[] filePaths) {
+        StringBuilder rapport = new StringBuilder();
+        int nbDeplacements = 0;
+
+        for (String filePath : filePaths) {
+            OperationFichier operationFichier = new OperationFichier();
+            operationFichier.setPathSource(java.nio.file.Path.of(filePath));
+            String dossierCible = operationFichier.rechercheCible(Catalogue.getInstance());
+
+            if (dossierCible == null) {
+                rapport.append("Pas de correspondance pour : ").append(filePath).append("\n");
+                logger.warn("Pas de correspondance trouvée pour {}", filePath);
+            } else {
+                operationFichier.deplacement();
+                rapport.append("Déplacé : ").append(filePath)
+                        .append(" -> ").append(dossierCible).append("\n");
+                logger.info("Copié vers : {}", dossierCible);
+                nbDeplacements++;
+            }
+        }
+
+        if (nbDeplacements == 0) {
+            rapport.append("Aucun fichier déplacé.");
+        } else {
+            rapport.append(nbDeplacements).append(" fichier(s) déplacé(s).");
+        }
+
+        return rapport.toString();
+    }
+}

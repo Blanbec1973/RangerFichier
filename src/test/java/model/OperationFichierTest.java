@@ -1,4 +1,4 @@
-package control;
+package model;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,4 +73,47 @@ class OperationFichierTest {
         File file2 = new File(TEMP_DIR+"/"+FILE_NAME);
         assertFalse(file2.exists());
     }
+
+    @Test
+    void testDeplacementFichierInexistant() {
+        operationFichier.setPathSource(Path.of("target/temp/inexistant.txt"));
+        assertDoesNotThrow(operationFichier::deplacement); // Ne doit pas planter
+    }
+
+    @Test
+    void testPathCibleCorrect() {
+        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
+        when(mockCatalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
+        operationFichier.rechercheCible(mockCatalogue);
+       assertEquals(Path.of("target/temp2", FILE_NAME), operationFichier.getPathCible());
+    }
+
+    @Test
+    void testRechercheCibleNull() {
+        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
+        when(mockCatalogue.searchTargetDirectory(any())).thenReturn(null);
+        String result = operationFichier.rechercheCible(mockCatalogue);
+        assertNull(result);
+        assertDoesNotThrow(operationFichier::deplacement);
+    }
+    @Test
+    void testDeplacementMultiple() throws IOException {
+        File file1 = new File(TEMP_DIR, "file1.txt");
+        File file2 = new File(TEMP_DIR, "file2.txt");
+        file1.createNewFile();
+        file2.createNewFile();
+
+        when(mockCatalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
+        operationFichier.setPathSource(file1.toPath());
+        operationFichier.rechercheCible(mockCatalogue);
+        operationFichier.deplacement();
+
+        operationFichier.setPathSource(file2.toPath());
+        operationFichier.rechercheCible(mockCatalogue);
+        operationFichier.deplacement();
+
+        assertTrue(new File(TEMP_DIR2, "file1.txt").exists());
+        assertTrue(new File(TEMP_DIR2, "file2.txt").exists());
+    }
+
 }

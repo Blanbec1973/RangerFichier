@@ -1,4 +1,4 @@
-package control;
+package model;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,5 +32,9 @@ public class OperationFichier {
         } catch (Exception e) {
             logger.error("Échec du déplacement de {} vers {} : {}", pathSource, pathCible, e.getMessage());
         }
+    }
+
+    public Path getPathCible() {
+        return pathCible;
     }
 }

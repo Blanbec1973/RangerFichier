@@ -1,11 +1,14 @@
-package control;
+package model;
 
+import exceptions.DatabaseAccessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 
 public class Catalogue {
@@ -41,14 +44,20 @@ public class Catalogue {
     public void remplir(ResultSet resultSet) {
         this.regex.clear();
         this.dossierCible.clear();
+
         while (true) {
+            String regexStr=null;
             try {
                 if (!resultSet.next()) break;
-                this.regex.add(resultSet.getString("REGEX"));
+                regexStr = resultSet.getString("REGEX");
+                Pattern.compile(regexStr);
+                this.regex.add(regexStr);
                 this.dossierCible.add(resultSet.getString("DOSSIERDEST"));
             } catch (SQLException e) {
                 logger.error(e.getMessage());
-                Thread.currentThread().interrupt();
+                throw new DatabaseAccessException("Erreur lors du remplissage catalogue", e);
+            } catch (PatternSyntaxException e) {
+                logger.warn("REgex invalide, ignorée : {}", regexStr);
             }
 
         }
@@ -59,4 +68,8 @@ public class Catalogue {
         return this.regex.size();
     }
 
+    public void clear() {
+        this.regex.clear();
+        this.dossierCible.clear();
+    }
 }
