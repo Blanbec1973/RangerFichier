@@ -1,14 +1,21 @@
 package control;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import view.OptionPaneUI;
 import view.UserInterface;
 import model.FileProcessingService;
 import org.heyner.common.Parameter;
 
 public class RangerFichierApp {
+    private static final Logger logger = LogManager.getLogger(RangerFichierApp.class);
 
     public static void main(String[] args) {
+        System.setProperty("file.encoding", "UTF-8");
         Parameter parametres = new Parameter("config.properties");
+        logger.info("RangerFichier v{}", parametres.getVersion());
+
         UserInterface ui = new OptionPaneUI();
         FileProcessingService service = new FileProcessingService(parametres);
 
@@ -20,7 +27,9 @@ public class RangerFichierApp {
      */
     static void run(String[] args, UserInterface ui, FileProcessingService service, Parameter parametres) {
         if (args == null || args.length == 0) {
-            ui.showMessage(parametres.getProperty("MsgErrNoFile"));
+            String msg = parametres.getProperty("MsgErrNoFile");
+            logger.error(msg);
+            ui.showMessage(msg);
             return;
         }
 
@@ -29,6 +38,7 @@ public class RangerFichierApp {
             String rapport = service.processFiles(args);
             ui.showMessage(rapport);
         } catch (Exception e) {
+            logger.fatal("Erreur critique : {}", e.getMessage());
             ui.showMessage("Erreur critique : " + e.getMessage());
         }
     }

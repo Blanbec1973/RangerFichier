@@ -1,8 +1,8 @@
 package model;
 
 import exceptions.DatabaseAccessException;
-import model.Connexion;
 import org.junit.jupiter.api.*;
+
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
