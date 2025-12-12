@@ -12,7 +12,6 @@ public class RangerFichierApp {
     private static final Logger logger = LogManager.getLogger(RangerFichierApp.class);
 
     public static void main(String[] args) {
-        System.setProperty("file.encoding", "UTF-8");
         Parameter parametres = new Parameter("config.properties");
         logger.info("RangerFichier v{}", parametres.getVersion());
 
@@ -38,7 +37,7 @@ public class RangerFichierApp {
             String rapport = service.processFiles(args);
             ui.showMessage(rapport);
         } catch (Exception e) {
-            logger.fatal("Erreur critique : {}", e.getMessage());
+            logger.fatal("Erreur critique", e);
             ui.showMessage("Erreur critique : " + e.getMessage());
         }
     }

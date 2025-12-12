@@ -18,12 +18,11 @@ import static org.mockito.Mockito.*;
 
 class FileProcessingServiceTest {
 
-    private Parameter mockParam;
     private FileProcessingService service;
 
     @BeforeEach
     void setUp() throws IOException {
-        mockParam = mock(Parameter.class);
+        Parameter mockParam = mock(Parameter.class);
         when(mockParam.getProperty("sql")).thenReturn("SELECT * FROM REGLES");
         service = new FileProcessingService(mockParam);
 
@@ -64,17 +63,15 @@ class FileProcessingServiceTest {
     void testMoveSimpleFile() {
         Path tempDir = Path.of("target/temp");
         File f = new File("target/temp/in/toto.txt");
-        String expected = "Déplacé : target/temp/in/toto.txt -> target/temp/out/\n" +
-                    "1 fichier(s) déplacé(s).";
 
         String[] files = {f.toString()};
         try (MockedStatic<Catalogue> catalogueMock = Mockito.mockStatic(Catalogue.class)) {
             Catalogue mockCatalogue = mock(Catalogue.class);
             when(mockCatalogue.searchTargetDirectory(any()))
-                    .thenReturn(tempDir.toString() + "/out/");
+                    .thenReturn(tempDir + "/out/");
             catalogueMock.when(Catalogue::getInstance).thenReturn(mockCatalogue);
 
-            String result = service.processFiles(files);
+            service.processFiles(files);
             assertTrue(new File("target/temp/out/toto.txt").exists());
             assertFalse(new File("target/temp/in/toto.txt").exists());
         }
@@ -90,7 +87,7 @@ class FileProcessingServiceTest {
         try (MockedStatic<Catalogue> catalogueMock = Mockito.mockStatic(Catalogue.class)) {
             Catalogue mockCatalogue = mock(Catalogue.class);
             when(mockCatalogue.searchTargetDirectory(any()))
-                    .thenReturn(tempDir.toString() + "/out/");
+                    .thenReturn(tempDir + "/out/");
             catalogueMock.when(Catalogue::getInstance).thenReturn(mockCatalogue);
 
             Files.createDirectories(tempDir.resolve("out"));
