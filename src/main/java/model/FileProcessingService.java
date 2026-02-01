@@ -53,11 +53,20 @@ public class FileProcessingService {
                 rapport.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
-                operationFichier.deplacement();
-                rapport.append("Déplacé : ").append(filePath)
-                        .append(" -> ").append(dossierCible).append("\n");
-                logger.info("Copié vers : {}", dossierCible);
-                nbDeplacements++;
+                if (dossierCible.startsWith("~")) {
+                    dossierCible = System.getProperty("user.home") + dossierCible.substring(1);
+                }
+                logger.info("Chemin cible : {}", dossierCible);
+                boolean success = operationFichier.deplacement();
+                if (success) {
+                    rapport.append("Déplacé : ").append(filePath)
+                            .append(" -> ").append(dossierCible).append("\n");
+                    logger.info("Copié vers : {}", dossierCible);
+                    nbDeplacements++;
+                } else {
+                    rapport.append("Échec du déplacement : ").append(filePath)
+                            .append(" -> ").append(dossierCible).append("\n");
+                }
             }
         }
 

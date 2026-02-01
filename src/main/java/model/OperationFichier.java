@@ -25,12 +25,15 @@ public class OperationFichier {
         return dossierCible;
     }
 
-    public void deplacement()  {
+    public boolean deplacement() {
         try {
+            Files.createDirectories(pathCible.getParent());
             Files.move(pathSource, pathCible, StandardCopyOption.REPLACE_EXISTING);
             logger.info("Fichier déplacé : {} -> {}", pathSource, pathCible);
+            return true;
         } catch (Exception e) {
             logger.error("Échec du déplacement de {} vers {} : {}", pathSource, pathCible, e.getMessage());
+            return false;
         }
     }
 

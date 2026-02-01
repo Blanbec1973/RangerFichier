@@ -12,7 +12,8 @@ public class RangerFichierApp {
     private static final Logger logger = LogManager.getLogger(RangerFichierApp.class);
 
     public static void main(String[] args) {
-        Parameter parametres = new Parameter("config.properties");
+        ParameterFactory parameterFactory = new ParameterFactory();
+        Parameter parametres = parameterFactory.getParameter();
         logger.info("RangerFichier v{}", parametres.getVersion());
 
         UserInterface ui = new OptionPaneUI();

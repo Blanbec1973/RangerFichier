@@ -12,7 +12,7 @@ Configuration:
 
     File:
       name: file
-      fileName: logs/RangerFichier.log
+      fileName: Workspace/logs/RangerFichier.log
       PatternLayout:
         charset: UTF-8
         pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
