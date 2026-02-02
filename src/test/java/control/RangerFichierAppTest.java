@@ -16,7 +16,8 @@ class RangerFichierAppTest {
         Parameter mockParam = mock(Parameter.class);
         when(mockParam.getProperty("MsgErrNoFile")).thenReturn("Arguments manquants");
 
-        RangerFichierApp.run(new String[]{}, mockUI, mockService, mockParam);
+        RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
+        app.run(new String[]{});
 
         verify(mockUI).showMessage("Arguments manquants");
         verifyNoInteractions(mockService);
@@ -30,7 +31,8 @@ class RangerFichierAppTest {
 
         when(mockService.processFiles(any())).thenReturn("Rapport OK");
 
-        RangerFichierApp.run(new String[]{"file.txt"}, mockUI, mockService, mockParam);
+        RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
+        app.run(new String[]{"file.txt"});
 
         verify(mockService).loadCatalogue();
         verify(mockService).processFiles(any());
@@ -45,7 +47,8 @@ class RangerFichierAppTest {
 
         doThrow(new RuntimeException("Erreur simulée")).when(mockService).loadCatalogue();
 
-        RangerFichierApp.run(new String[]{"file.txt"}, mockUI, mockService, mockParam);
+        RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
+        app.run(new String[]{"file.txt"});
 
         verify(mockUI).showMessage("Erreur critique : Erreur simulée");
     }

@@ -10,6 +10,15 @@ import org.heyner.common.Parameter;
 
 public class RangerFichierApp {
     private static final Logger logger = LogManager.getLogger(RangerFichierApp.class);
+    private final UserInterface ui;
+    private final FileProcessingService service;
+    private final Parameter parametres;
+
+    public RangerFichierApp(UserInterface ui, FileProcessingService service, Parameter parametres) {
+        this.ui = ui;
+        this.service = service;
+        this.parametres = parametres;
+    }
 
     public static void main(String[] args) {
         ParameterFactory parameterFactory = new ParameterFactory();
@@ -19,13 +28,15 @@ public class RangerFichierApp {
         UserInterface ui = new OptionPaneUI();
         FileProcessingService service = new FileProcessingService(parametres);
 
-        run(args, ui, service, parametres);
+        // Injection manuelle
+        RangerFichierApp app = new RangerFichierApp(ui, service, parametres);
+        app.run(args);
     }
 
     /**
      * Méthode testable qui contient la logique principale.
      */
-    static void run(String[] args, UserInterface ui, FileProcessingService service, Parameter parametres) {
+     void run(String[] args) {
         if (args == null || args.length == 0) {
             String msg = parametres.getProperty("MsgErrNoFile");
             logger.error(msg);

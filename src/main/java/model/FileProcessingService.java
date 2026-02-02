@@ -8,6 +8,7 @@ import org.heyner.common.Parameter;
 public class FileProcessingService {
     private static final Logger logger = LogManager.getLogger(FileProcessingService.class);
     private final Parameter parametres;
+    private Catalogue catalogue;
 
     public FileProcessingService(Parameter parametres) {
         this.parametres = parametres;
@@ -19,9 +20,10 @@ public class FileProcessingService {
     public void loadCatalogue(Connexion connexion) {
         try {
             connexion.connect();
-            connexion.query(parametres.getProperty("sql"));
-            Catalogue.getInstance().remplir(connexion.getResultSet());
-            logger.info("Catalogue chargé avec {} règles", Catalogue.getInstance().getTailleCatalogue());
+            RegleRepository repository = new RegleRepository(connexion, parametres);
+            catalogue = new Catalogue();
+            catalogue.chargerDepuisRepository(repository);
+            logger.info("Catalogue chargé avec {} règles", catalogue.getTailleCatalogue());
         } catch (DatabaseAccessException e) {
             logger.error("Erreur critique : {}", e.getMessage());
             throw e;
@@ -47,7 +49,7 @@ public class FileProcessingService {
         for (String filePath : filePaths) {
             OperationFichier operationFichier = new OperationFichier();
             operationFichier.setPathSource(java.nio.file.Path.of(filePath));
-            String dossierCible = operationFichier.rechercheCible(Catalogue.getInstance());
+            String dossierCible = operationFichier.rechercheCible(catalogue);
 
             if (dossierCible == null) {
                 rapport.append("Pas de correspondance pour : ").append(filePath).append("\n");

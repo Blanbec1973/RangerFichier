@@ -3,7 +3,6 @@ package model;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
@@ -11,8 +10,8 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OperationFichierTest {
@@ -57,12 +56,18 @@ class OperationFichierTest {
     @Order(2)
     void rechercheCible() {
         operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-        try (MockedStatic<Catalogue> catalogueMock = mockStatic(Catalogue.class)) {
-            catalogueMock.when(Catalogue::getInstance).thenReturn(mockCatalogue);
-            when(Catalogue.getInstance().searchTargetDirectory(any())).thenReturn("target/temp2/");
-            assertEquals("target/temp2/", operationFichier.rechercheCible(Catalogue.getInstance()));
-        }
+        Catalogue catalogue = mock(Catalogue.class);
+        when(catalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
+        assertEquals("target/temp2/", operationFichier.rechercheCible(catalogue));
+
     }
+
+
+//    public String rechercheCible(Catalogue catalogue) {
+//        String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
+//        if (dossierCible != null) pathCible = Path.of(dossierCible+pathSource.getFileName().toString());
+//        return dossierCible;
+//    }
 
     @Test
     @Order(3)

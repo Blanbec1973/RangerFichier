@@ -19,6 +19,7 @@ public class OperationFichier {
     public Path getPathSource() {
         return pathSource;
     }
+
     public String rechercheCible(Catalogue catalogue) {
         String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
         if (dossierCible != null) pathCible = Path.of(dossierCible+pathSource.getFileName().toString());
