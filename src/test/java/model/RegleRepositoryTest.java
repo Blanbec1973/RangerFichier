@@ -38,7 +38,7 @@ class RegleRepositoryTest {
 
     @Test
     void testFindAllRegles() {
-        RegleRepository repo = new RegleRepository(connexion, parametres);
+        RegleRepository repo = new RegleRepository(parametres, connexion);
         List<Regle> regles = repo.findAllRegles();
         assertEquals(1, regles.size());
         assertEquals("^test.*", regles.get(0).regex());

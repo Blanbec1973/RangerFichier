@@ -1,0 +1,33 @@
+@startuml
+title RangerFichier
+class RangerFichierApp
+class ParameterFactory
+class Parameter
+class Catalogue
+Class Connexion
+
+class OptionPaneUI
+interface UserInterface
+UserInterface : void showMessage(String message)
+OptionPaneUI ..|> UserInterface
+class FileProcessingService
+class OperationFichier
+class RegleRepository
+
+RangerFichierApp o-- UserInterface
+RangerFichierApp o-- FileProcessingService
+RangerFichierApp o-- Parameter
+
+FileProcessingService o-- Parameter
+FileProcessingService *-- Catalogue
+FileProcessingService --> OperationFichier
+
+RegleRepository o-- Parameter
+RegleRepository o-- Connexion
+RegleRepository --> Regle
+
+Catalogue --> RegleRepository
+
+OperationFichier --> Catalogue
+
+@enduml

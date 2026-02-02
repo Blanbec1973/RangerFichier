@@ -1,49 +1,29 @@
 package model;
 
-import exceptions.DatabaseAccessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.heyner.common.Parameter;
 
 public class FileProcessingService {
     private static final Logger logger = LogManager.getLogger(FileProcessingService.class);
-    private final Parameter parametres;
-    private Catalogue catalogue;
+    private final RegleRepository regleRepository;
+    private final Catalogue catalogue;
+    private final ReportService reportService;
 
-    public FileProcessingService(Parameter parametres) {
-        this.parametres = parametres;
+    public FileProcessingService(RegleRepository regleRepository, Catalogue catalogue,
+                                 ReportService reportService) {
+        this.regleRepository = regleRepository;
+        this.catalogue = catalogue;
+        this.reportService = reportService;
     }
 
-    /**
-     * Charge le catalogue en utilisant une connexion injectée (facilite les tests).
-     */
-    public void loadCatalogue(Connexion connexion) {
-        try {
-            connexion.connect();
-            RegleRepository repository = new RegleRepository(connexion, parametres);
-            catalogue = new Catalogue();
-            catalogue.chargerDepuisRepository(repository);
-            logger.info("Catalogue chargé avec {} règles", catalogue.getTailleCatalogue());
-        } catch (DatabaseAccessException e) {
-            logger.error("Erreur critique : {}", e.getMessage());
-            throw e;
-        }
-    }
-
-    /**
-     * Version pratique pour la production (crée la connexion automatiquement).
-     */
-    public void loadCatalogue() {
-        try (Connexion connexion = new Connexion(parametres.getProperty("url"))) {
-            loadCatalogue(connexion);
-        }
+    public void loadCatalog() {
+        catalogue.chargerDepuisRepository(regleRepository);
     }
 
     /**
      * Traite les fichiers et retourne un rapport.
      */
-    public String processFiles(String[] filePaths) {
-        StringBuilder rapport = new StringBuilder();
+    public void processFiles(String[] filePaths) {
         int nbDeplacements = 0;
 
         for (String filePath : filePaths) {
@@ -52,7 +32,7 @@ public class FileProcessingService {
             String dossierCible = operationFichier.rechercheCible(catalogue);
 
             if (dossierCible == null) {
-                rapport.append("Pas de correspondance pour : ").append(filePath).append("\n");
+                reportService.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
                 if (dossierCible.startsWith("~")) {
@@ -61,23 +41,20 @@ public class FileProcessingService {
                 logger.info("Chemin cible : {}", dossierCible);
                 boolean success = operationFichier.deplacement();
                 if (success) {
-                    rapport.append("Déplacé : ").append(filePath)
+                    reportService.append("Déplacé : ").append(filePath)
                             .append(" -> ").append(dossierCible).append("\n");
                     logger.info("Copié vers : {}", dossierCible);
                     nbDeplacements++;
                 } else {
-                    rapport.append("Échec du déplacement : ").append(filePath)
+                    reportService.append("Échec du déplacement : ").append(filePath)
                             .append(" -> ").append(dossierCible).append("\n");
                 }
             }
         }
+        reportService.addTotalReport(nbDeplacements);
 
-        if (nbDeplacements == 0) {
-            rapport.append("Aucun fichier déplacé.");
-        } else {
-            rapport.append(nbDeplacements).append(" fichier(s) déplacé(s).");
-        }
+    }
 
-        return rapport.toString();
+    public String getReport() { return reportService.getReport();
     }
 }

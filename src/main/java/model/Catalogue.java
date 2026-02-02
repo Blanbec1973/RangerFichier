@@ -12,7 +12,7 @@ public class Catalogue {
     private final ArrayList <String> dossierCible = new ArrayList<>();
     private static final Logger logger = LogManager.getLogger(Catalogue.class);
 
-    Catalogue() {
+    public Catalogue() {
 
     }
 
@@ -38,6 +38,7 @@ public class Catalogue {
                 this.regex.add(regle.regex());
                 this.dossierCible.add(regle.dossier());
             }
+            logger.info("Catalogue chargé avec {} règles", getTailleCatalogue());
         }
 
 

@@ -1,6 +1,9 @@
 package control;
 
 
+import model.Catalogue;
+import model.RegleRepository;
+import model.ReportService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import view.OptionPaneUI;
@@ -26,7 +29,10 @@ public class RangerFichierApp {
         logger.info("RangerFichier v{}", parametres.getVersion());
 
         UserInterface ui = new OptionPaneUI();
-        FileProcessingService service = new FileProcessingService(parametres);
+        RegleRepository regleRepository = new RegleRepository(parametres);
+        Catalogue catalog = new Catalogue();
+        ReportService reportService = new ReportService();
+        FileProcessingService service = new FileProcessingService(regleRepository, catalog, reportService);
 
         // Injection manuelle
         RangerFichierApp app = new RangerFichierApp(ui, service, parametres);
@@ -45,9 +51,10 @@ public class RangerFichierApp {
         }
 
         try {
-            service.loadCatalogue();
-            String rapport = service.processFiles(args);
-            ui.showMessage(rapport);
+            service.loadCatalog();
+            service.processFiles(args);
+            String report = service.getReport();
+            ui.showMessage(report);
         } catch (Exception e) {
             logger.fatal("Erreur critique", e);
             ui.showMessage("Erreur critique : " + e.getMessage());

@@ -11,16 +11,22 @@ import java.util.List;
 
 public class RegleRepository {
     private final Connexion connexion;
-    private  final Parameter parametres;
+    private final Parameter parameters;
 
-    public RegleRepository(Connexion connexion, Parameter parametres) {
+    public RegleRepository(Parameter parameters, Connexion connexion) {
+        this.parameters = parameters;
         this.connexion = connexion;
-        this.parametres = parametres;
+    }
+
+    public RegleRepository(Parameter parameters) {
+        this.parameters = parameters;
+        this.connexion = new Connexion(parameters.getProperty("url"));
+        connexion.connect();
     }
 
     public List<Regle> findAllRegles() {
         List<Regle> regles = new ArrayList<>();
-        String sql = parametres.getProperty("sql");
+        String sql = parameters.getProperty("sql");
         try (Statement stmt = connexion.getConn().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {

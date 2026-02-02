@@ -29,14 +29,14 @@ class RangerFichierAppTest {
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
 
-        when(mockService.processFiles(any())).thenReturn("Rapport OK");
+        when(mockService.getReport()).thenReturn("Report OK");
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
         app.run(new String[]{"file.txt"});
 
-        verify(mockService).loadCatalogue();
+        verify(mockService).loadCatalog();
         verify(mockService).processFiles(any());
-        verify(mockUI).showMessage("Rapport OK");
+        verify(mockUI).showMessage("Report OK");
     }
 
     @Test
@@ -45,7 +45,7 @@ class RangerFichierAppTest {
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
 
-        doThrow(new RuntimeException("Erreur simulée")).when(mockService).loadCatalogue();
+        doThrow(new RuntimeException("Erreur simulée")).when(mockService).loadCatalog();
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
         app.run(new String[]{"file.txt"});

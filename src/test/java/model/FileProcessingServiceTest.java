@@ -14,13 +14,15 @@ import static org.mockito.Mockito.*;
 
 class FileProcessingServiceTest {
 
-    private FileProcessingService service;
-
     @BeforeEach
     void setUp() throws IOException {
         Parameter mockParam = mock(Parameter.class);
+        RegleRepository mockRepository = mock(RegleRepository.class);
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        ReportService mockReportService = mock(ReportService.class);
+
         when(mockParam.getProperty("sql")).thenReturn("SELECT * FROM REGLES");
-        service = new FileProcessingService(mockParam);
+        FileProcessingService service = new FileProcessingService(mockRepository, mockCatalogue, mockReportService);
 
         new File("target/temp").mkdir();
         new File("target/temp/in").mkdir();
