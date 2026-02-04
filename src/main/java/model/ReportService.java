@@ -3,9 +3,9 @@ package model;
 public class ReportService {
     StringBuilder rapport = new StringBuilder();
 
-    StringBuilder append(String text) {
+    ReportService append(String text) {
         rapport.append(text);
-        return rapport;
+        return this;
     }
 
     void addTotalReport(int moveCounter) {

@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class FileProcessingServiceTest {
@@ -33,6 +34,102 @@ class FileProcessingServiceTest {
             FileUtils.cleanDirectory(new File("target/temp/out"));
         File f = new File("target/temp/in/toto.txt");
         f.createNewFile();
+    }
+
+    @Test
+    void testLoadCatalog() {
+        RegleRepository mockRepo = mock(RegleRepository.class);
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        ReportService mockReport = mock(ReportService.class);
+
+        FileProcessingService service = new FileProcessingService(mockRepo, mockCatalogue, mockReport);
+        service.loadCatalog();
+
+        verify(mockCatalogue).chargerDepuisRepository(mockRepo);
+    }
+
+    @Test
+    void testProcessFiles_NoMatch() {
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        RegleRepository mockRepo = mock(RegleRepository.class);
+        ReportService mockReport = mock(ReportService.class);
+
+        // append() doit renvoyer le même object sinon chainage impossible
+        when(mockReport.append(anyString())).thenReturn(mockReport);
+
+        when(mockCatalogue.searchTargetDirectory(anyString())).thenReturn(null);
+
+        FileProcessingService fps = new FileProcessingService(mockRepo, mockCatalogue, mockReport);
+
+        fps.processFiles(new String[]{"toto.pdf"});
+
+        verify(mockReport).append("Pas de correspondance pour : ");
+        verify(mockReport).append("toto.pdf");
+        verify(mockReport).addTotalReport(0);
+    }
+
+
+    @Test
+    void testProcessFiles_MoveFails() {
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        RegleRepository mockRepo = mock(RegleRepository.class);
+        ReportService mockReport = mock(ReportService.class);
+
+        FileProcessingService fps = spy(new FileProcessingService(mockRepo, mockCatalogue, mockReport));
+
+        OperationFichier mockOp = mock(OperationFichier.class);
+        doReturn(mockOp).when(fps).createOperationFichier();
+
+        when(mockReport.append(anyString())).thenReturn(mockReport);
+
+        // IMPORTANT
+        doNothing().when(mockOp).setPathSource(any());
+        when(mockOp.rechercheCible(mockCatalogue)).thenReturn("/tmp/");
+        when(mockOp.deplacement()).thenReturn(false);
+
+        fps.processFiles(new String[]{"fichier.pdf"});
+
+        verify(mockReport).append("Échec du déplacement : ");
+        verify(mockReport).addTotalReport(0);
+    }
+    @Test
+    void testProcessFiles_MoveSuccess() {
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        RegleRepository mockRepo = mock(RegleRepository.class);
+        ReportService mockReport = mock(ReportService.class);
+
+        // append chaining
+        when(mockReport.append(anyString())).thenReturn(mockReport);
+
+        FileProcessingService fps = spy(new FileProcessingService(mockRepo, mockCatalogue, mockReport));
+        OperationFichier mockOp = mock(OperationFichier.class);
+
+        // On remplace l’instance créée par FileProcessingService
+        doReturn(mockOp).when(fps).createOperationFichier();
+
+        // IMPORTANT :
+        doNothing().when(mockOp).setPathSource(any());
+        when(mockCatalogue.searchTargetDirectory(anyString())).thenReturn("/tmp/");
+        when(mockOp.rechercheCible(mockCatalogue)).thenReturn("/tmp/");
+        when(mockOp.deplacement()).thenReturn(true);
+
+        fps.processFiles(new String[]{"doc.txt"});
+
+        verify(mockReport).append("Déplacé : ");
+        verify(mockReport).addTotalReport(1);
+    }
+
+    @Test
+    void testGetReport() {
+        ReportService mockReport = mock(ReportService.class);
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        RegleRepository mockRepo = mock(RegleRepository.class);
+
+        when(mockReport.getReport()).thenReturn("Mon Rapport");
+
+        FileProcessingService fps = new FileProcessingService(mockRepo, mockCatalogue, mockReport);
+
+        assertEquals("Mon Rapport", fps.getReport());
     }
 
     @Test

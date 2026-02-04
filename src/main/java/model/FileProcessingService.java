@@ -16,6 +16,10 @@ public class FileProcessingService {
         this.reportService = reportService;
     }
 
+    protected OperationFichier createOperationFichier() {
+        return new OperationFichier();
+    }
+
     public void loadCatalog() {
         catalogue.chargerDepuisRepository(regleRepository);
     }
@@ -27,7 +31,7 @@ public class FileProcessingService {
         int nbDeplacements = 0;
 
         for (String filePath : filePaths) {
-            OperationFichier operationFichier = new OperationFichier();
+            OperationFichier operationFichier = createOperationFichier();
             operationFichier.setPathSource(java.nio.file.Path.of(filePath));
             String dossierCible = operationFichier.rechercheCible(catalogue);
 

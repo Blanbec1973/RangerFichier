@@ -3,6 +3,7 @@ package model;
 import org.heyner.common.Parameter;
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,16 +16,9 @@ class RegleRepositoryTest {
     private Parameter parametres;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp()  {
         connexion = new Connexion("jdbc:sqlite::memory:");
         connexion.connect();
-
-        // Création de la table et insertion de données de test
-        Connection conn = connexion.getConn();
-        try (Statement stmt = conn.createStatement()) {
-            stmt.execute("CREATE TABLE REGLES (REGEX TEXT, DOSSIERDEST TEXT)");
-            stmt.execute("INSERT INTO REGLES (REGEX, DOSSIERDEST) VALUES ('^test.*', '/tmp/')");
-        }
 
         // Mock ou stub de Parameter pour fournir la requête SQL
         parametres = mock(Parameter.class);
@@ -38,10 +32,35 @@ class RegleRepositoryTest {
 
     @Test
     void testFindAllRegles() {
+        // Création de la table et insertion de données de test
+        Connection conn = connexion.getConn();
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("CREATE TABLE REGLES (REGEX TEXT, DOSSIERDEST TEXT)");
+            stmt.execute("INSERT INTO REGLES (REGEX, DOSSIERDEST) VALUES ('^test.*', '/tmp/')");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         RegleRepository repo = new RegleRepository(parametres, connexion);
         List<Regle> regles = repo.findAllRegles();
         assertEquals(1, regles.size());
         assertEquals("^test.*", regles.get(0).regex());
         assertEquals("/tmp/", regles.get(0).dossier());
     }
+    @Test
+    void testEmptyTable() {
+        Connection conn = connexion.getConn();
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("CREATE TABLE REGLES (REGEX TEXT, DOSSIERDEST TEXT)");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        RegleRepository repo = new RegleRepository(parametres, connexion);
+        List<Regle> regles = repo.findAllRegles();
+        assertEquals(0, regles.size());
+    }
+
+
+
+
 }

@@ -3,6 +3,8 @@ package model;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 import java.util.Arrays;
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CatalogueTest {
@@ -24,4 +26,14 @@ class CatalogueTest {
         assertEquals("/notes/", catalogue.searchTargetDirectory("note_de_frais.pdf"));
         assertNull(catalogue.searchTargetDirectory("autre.docx"));
     }
+
+    @Test
+    void testCatalogEmpty() {
+        RegleRepository mockRepo = mock(RegleRepository.class);
+        Catalogue catalogue = new Catalogue();
+        when(mockRepo.findAllRegles()).thenReturn(Collections.emptyList());
+        assertDoesNotThrow(() -> catalogue.chargerDepuisRepository(mockRepo));
+    }
+
+
 }
