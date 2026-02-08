@@ -39,9 +39,6 @@ public class FileProcessingService {
                 reportService.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
-                if (dossierCible.startsWith("~")) {
-                    dossierCible = System.getProperty("user.home") + dossierCible.substring(1);
-                }
                 logger.info("Chemin cible : {}", dossierCible);
                 boolean success = operationFichier.deplacement();
                 if (success) {

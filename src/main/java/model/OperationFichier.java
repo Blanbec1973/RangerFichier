@@ -22,7 +22,13 @@ public class OperationFichier {
 
     public String rechercheCible(Catalogue catalogue) {
         String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
-        if (dossierCible != null) pathCible = Path.of(dossierCible+pathSource.getFileName().toString());
+        if (dossierCible != null) {
+            // Remplacement du tilde ici
+            if (dossierCible.startsWith("~")) {
+                dossierCible = System.getProperty("user.home") + dossierCible.substring(1);
+            }
+            pathCible = Path.of(dossierCible, pathSource.getFileName().toString());
+        }
         return dossierCible;
     }
 
