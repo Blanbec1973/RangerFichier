@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.FileMoveException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,7 +41,8 @@ public class OperationFichier {
             return true;
         } catch (Exception e) {
             logger.error("Échec du déplacement de {} vers {} : {}", pathSource, pathCible, e.getMessage());
-            return false;
+            throw new FileMoveException(
+                    "Impossible de déplacer le fichier : " + pathSource.getFileName(), e);
         }
     }
 

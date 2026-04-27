@@ -40,15 +40,22 @@ public class FileProcessingService {
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
                 logger.info("Chemin cible : {}", dossierCible);
-                boolean success = operationFichier.deplacement();
-                if (success) {
-                    reportService.append("Déplacé : ").append(filePath)
-                            .append(" -> ").append(dossierCible).append("\n");
-                    logger.info("Copié vers : {}", dossierCible);
+                try {
+                    operationFichier.deplacement();
+                    rapport.append("Déplacé : ")
+                            .append(filePath)
+                            .append(" -> ")
+                            .append(dossierCible)
+                            .append("\n");
+                    logger.info("Déplacé vers : {}", dossierCible);
                     nbDeplacements++;
-                } else {
-                    reportService.append("Échec du déplacement : ").append(filePath)
-                            .append(" -> ").append(dossierCible).append("\n");
+                } catch (Exception e) {
+                    rapport.append("ERREUR : ")
+                            .append(filePath)
+                            .append(" -> ")
+                            .append(e.getMessage())
+                            .append("\n");
+                    logger.error("Déplacement échoué pour {}", filePath, e);
                 }
             }
         }

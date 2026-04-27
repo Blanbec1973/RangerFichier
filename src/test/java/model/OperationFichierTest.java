@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.FileMoveException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -82,7 +83,10 @@ class OperationFichierTest {
     @Test
     void testDeplacementFichierInexistant() {
         operationFichier.setPathSource(Path.of("target/temp/inexistant.txt"));
-        assertDoesNotThrow(operationFichier::deplacement); // Ne doit pas planter
+        assertThrows(
+                FileMoveException.class,
+                operationFichier::deplacement
+        );
     }
 
     @Test
@@ -99,7 +103,10 @@ class OperationFichierTest {
         when(mockCatalogue.searchTargetDirectory(any())).thenReturn(null);
         String result = operationFichier.rechercheCible(mockCatalogue);
         assertNull(result);
-        assertDoesNotThrow(operationFichier::deplacement);
+        assertThrows(
+                FileMoveException.class,
+                operationFichier::deplacement
+        );
     }
     @Test
     void testDeplacementMultiple() throws IOException {
