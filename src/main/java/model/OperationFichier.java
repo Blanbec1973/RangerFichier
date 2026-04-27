@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.FileMoveException;
+import model.util.PathNormalizer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,11 +25,8 @@ public class OperationFichier {
     public String rechercheCible(Catalogue catalogue) {
         String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
         if (dossierCible != null) {
-            // Remplacement du tilde ici
-            if (dossierCible.startsWith("~")) {
-                dossierCible = System.getProperty("user.home") + dossierCible.substring(1);
-            }
-            pathCible = Path.of(dossierCible, pathSource.getFileName().toString());
+            Path base = PathNormalizer.normalize(dossierCible);
+            pathCible = base.resolve(pathSource.getFileName());
         }
         return dossierCible;
     }

@@ -3,14 +3,17 @@ package model;
 import org.apache.commons.io.FileUtils;
 import org.heyner.common.Parameter;
 import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class FileProcessingServiceTest {
@@ -145,54 +148,33 @@ class FileProcessingServiceTest {
 //        verify(mockConnexion).getResultSet();
     }
 
-//    @Test
-//    void testLoadCatalogueThrowsException() {
-//        Connexion mockConnexion = mock(Connexion.class);
-//        doThrow(new exceptions.DatabaseAccessException("Erreur critique", new RuntimeException()))
-//                .when(mockConnexion).query(anyString());
-//
-//        assertThrows(exceptions.DatabaseAccessException.class,
-//                () -> service.loadCatalogue(mockConnexion));
-//    }
-//    @Test
-//    void testMoveSimpleFile() {
-//        Path tempDir = Path.of("target/temp");
-//        File f = new File("target/temp/in/toto.txt");
-//
-//        String[] files = {f.toString()};
-//        try (MockedStatic<Catalogue> catalogueMock = Mockito.mockStatic(Catalogue.class)) {
-//            Catalogue mockCatalogue = mock(Catalogue.class);
-//            when(mockCatalogue.searchTargetDirectory(any()))
-//                    .thenReturn(tempDir + "/out/");
-//            catalogueMock.when(Catalogue::getInstance).thenReturn(mockCatalogue);
-//
-//            service.processFiles(files);
-//            assertTrue(new File("target/temp/out/toto.txt").exists());
-//            assertFalse(new File("target/temp/in/toto.txt").exists());
-//        }
-//    }
-//    @Test
-//    void testProcessFilesMultiple() throws Exception {
-//        Path tempDir = Path.of("target/temp");
-//        File file1 = new File("target/temp/in/toto1.txt");
-//        file1.createNewFile();
-//        File file2 = new File("target/temp/in/toto2.txt");
-//        file2.createNewFile();
-//
-//        try (MockedStatic<Catalogue> catalogueMock = Mockito.mockStatic(Catalogue.class)) {
-//            Catalogue mockCatalogue = mock(Catalogue.class);
-//            when(mockCatalogue.searchTargetDirectory(any()))
-//                    .thenReturn(tempDir + "/out/");
-//            catalogueMock.when(Catalogue::getInstance).thenReturn(mockCatalogue);
-//
-//            Files.createDirectories(tempDir.resolve("out"));
-//            String[] files = {file1.toString(), file2.toString()};
-//            String result = service.processFiles(files);
-//
-//            assertTrue(result.contains("toto1.txt"));
-//            assertTrue(result.contains("toto2.txt"));
-//            assertTrue(Files.exists(tempDir.resolve("out/toto1.txt")));
-//            assertTrue(Files.exists(tempDir.resolve("out/toto2.txt")));
-//        }
-//    }
+    @Test
+    void testProcessFilesWithUserProfileInTarget() {
+        Path tempIn = Path.of("target/temp/in");
+        Path tempOut = Path.of(System.getProperty("user.home"), "rf_test_out");
+        Catalogue mockCatalogue = mock(Catalogue.class);
+        RegleRepository mockRepo = mock(RegleRepository.class);
+        ReportService mockReport = mock(ReportService.class);
+        FileProcessingService fps = spy(new FileProcessingService(mockRepo, mockCatalogue, mockReport));
+
+        try {
+            Files.createDirectories(tempIn);
+            Files.createDirectories(tempOut);
+
+            File f = tempIn.resolve("userprofile.txt").toFile();
+            f.createNewFile();
+
+            try (MockedStatic<Catalogue> catalogueMock = Mockito.mockStatic(Catalogue.class)) {
+                when(mockCatalogue.searchTargetDirectory(any()))
+                        .thenReturn("%USERPROFILE%/rf_test_out/");
+                //catalogueMock.when(mockCatalogue.getInstance).thenReturn(mockCatalogue);
+
+                fps.processFiles(new String[]{f.getPath()});
+                assertTrue(Files.exists(tempOut.resolve("userprofile.txt")));
+                //assertTrue(result.contains("Déplacé"));
+            }
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
 }
