@@ -42,7 +42,7 @@ public class FileProcessingService {
                 logger.info("Chemin cible : {}", dossierCible);
                 try {
                     operationFichier.deplacement();
-                    rapport.append("Déplacé : ")
+                    reportService.append("Déplacé : ")
                             .append(filePath)
                             .append(" -> ")
                             .append(dossierCible)
@@ -50,7 +50,7 @@ public class FileProcessingService {
                     logger.info("Déplacé vers : {}", dossierCible);
                     nbDeplacements++;
                 } catch (Exception e) {
-                    rapport.append("ERREUR : ")
+                    reportService.append("ERREUR : ")
                             .append(filePath)
                             .append(" -> ")
                             .append(e.getMessage())
