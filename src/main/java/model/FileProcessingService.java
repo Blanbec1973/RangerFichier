@@ -53,11 +53,23 @@ public class FileProcessingService {
                 rapport.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
-                operationFichier.deplacement();
-                rapport.append("Déplacé : ").append(filePath)
-                        .append(" -> ").append(dossierCible).append("\n");
-                logger.info("Copié vers : {}", dossierCible);
-                nbDeplacements++;
+                try {
+                    operationFichier.deplacement();
+                    rapport.append("Déplacé : ")
+                            .append(filePath)
+                            .append(" -> ")
+                            .append(dossierCible)
+                            .append("\n");
+                    logger.info("Déplacé vers : {}", dossierCible);
+                    nbDeplacements++;
+                } catch (Exception e) {
+                    rapport.append("ERREUR : ")
+                            .append(filePath)
+                            .append(" -> ")
+                            .append(e.getMessage())
+                            .append("\n");
+                    logger.error("Déplacement échoué pour {}", filePath, e);
+                }
             }
         }
 
