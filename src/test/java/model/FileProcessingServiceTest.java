@@ -3,19 +3,14 @@ package model;
 import org.apache.commons.io.FileUtils;
 import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.domain.Catalog;
-import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
-import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
+import org.heyner.rangerfichier.domain.services.ReportService;
 import org.junit.jupiter.api.*;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

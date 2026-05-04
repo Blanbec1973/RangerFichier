@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.DatabaseAccessException;
+import org.heyner.rangerfichier.shared.exceptions.DatabaseAccessException;
 import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 

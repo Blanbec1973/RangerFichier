@@ -1,4 +1,4 @@
-package model.util;
+package org.heyner.rangerfichier.shared.util;
 
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.junit.jupiter.api.Test;

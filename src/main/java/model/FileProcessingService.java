@@ -3,7 +3,7 @@ package model;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.rangerfichier.domain.Catalog;
-import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
+import org.heyner.rangerfichier.domain.services.ReportService;
 
 import java.nio.file.Path;
 import java.util.Optional;

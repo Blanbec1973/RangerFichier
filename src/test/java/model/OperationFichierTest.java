@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.FileMoveException;
+import org.heyner.rangerfichier.shared.exceptions.FileMoveException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

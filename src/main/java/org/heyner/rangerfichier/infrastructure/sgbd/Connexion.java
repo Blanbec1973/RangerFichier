@@ -1,6 +1,6 @@
 package org.heyner.rangerfichier.infrastructure.sgbd;
 
-import exceptions.DatabaseAccessException;
+import org.heyner.rangerfichier.shared.exceptions.DatabaseAccessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

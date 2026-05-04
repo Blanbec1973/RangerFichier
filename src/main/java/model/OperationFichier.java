@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.FileMoveException;
+import org.heyner.rangerfichier.shared.exceptions.FileMoveException;
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

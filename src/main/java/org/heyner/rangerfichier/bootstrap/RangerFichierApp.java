@@ -1,7 +1,7 @@
-package control;
+package org.heyner.rangerfichier.bootstrap;
 
 
-import model.ReportService;
+import org.heyner.rangerfichier.domain.services.ReportService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.rangerfichier.domain.Catalog;

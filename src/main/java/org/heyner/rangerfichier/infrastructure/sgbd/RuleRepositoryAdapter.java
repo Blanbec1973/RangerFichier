@@ -1,6 +1,6 @@
 package org.heyner.rangerfichier.infrastructure.sgbd;
 
-import exceptions.DatabaseAccessException;
+import org.heyner.rangerfichier.shared.exceptions.DatabaseAccessException;
 import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.domain.Rule;
 import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
