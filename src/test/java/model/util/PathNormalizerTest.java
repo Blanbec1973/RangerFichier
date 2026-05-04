@@ -9,11 +9,17 @@ class PathNormalizerTest {
 
     @Test
     void normalizeWithUserProfile() {
-        String raw = "%USERPROFILE%/Downloads/Test";
-        Path path = PathNormalizer.normalize(raw);
+        String oldUserHome = System.getProperty("user.home");
+        try {
+            System.setProperty("user.home", "C:/Users/testuser");
 
-        assertTrue(path.toString().contains(System.getProperty("user.home")));
-        assertTrue(path.endsWith("Downloads/Test"));
+            Path expected = Path.of("C:/Users/testuser", "Downloads", "Test");
+            Path actual = PathNormalizer.normalize("%USERPROFILE%/Downloads/Test");
+
+            assertEquals(expected, actual);
+        } finally {
+            System.setProperty("user.home", oldUserHome);
+        }
     }
 
     @Test
