@@ -1,5 +1,6 @@
-package model;
+package org.heyner.rangerfichier.domain.services;
 
+import model.Catalogue;
 import org.heyner.rangerfichier.shared.exceptions.FileMoveException;
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.apache.logging.log4j.LogManager;

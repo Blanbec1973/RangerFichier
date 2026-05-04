@@ -4,7 +4,6 @@ package org.heyner.rangerfichier.domain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +15,7 @@ public class Catalog {
         this.rules = List.copyOf(rules);
     }
 
-    public Optional<Path> searchTargetDirectory(String fileName) {
+    public Optional<String> searchTargetDirectory(String fileName) {
         int i = 0;
         boolean trouve = false;
         logger.info("File to parse with regexs : {}", fileName);
@@ -26,10 +25,7 @@ public class Catalog {
             logger.info(str);
             i = i + 1;
         }
-        Path destinationDirectory = null;
-        if (trouve) {
-            destinationDirectory = Path.of(this.rules.get(i - 1).destinationDirectory());
-        }
-        return trouve ? Optional.of(destinationDirectory) : Optional.empty();
+
+        return trouve ? Optional.of(this.rules.get(i - 1).destinationDirectory()) : Optional.empty();
     }
 }

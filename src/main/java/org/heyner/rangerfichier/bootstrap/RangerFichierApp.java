@@ -10,7 +10,7 @@ import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 import org.heyner.rangerfichier.infrastructure.sgbd.RuleRepositoryAdapter;
 import view.OptionPaneUI;
 import view.UserInterface;
-import model.FileProcessingService;
+import org.heyner.rangerfichier.domain.services.FileProcessingService;
 import org.heyner.common.Parameter;
 
 public class RangerFichierApp {

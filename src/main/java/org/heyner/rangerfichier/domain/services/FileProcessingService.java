@@ -1,9 +1,8 @@
-package model;
+package org.heyner.rangerfichier.domain.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.rangerfichier.domain.Catalog;
-import org.heyner.rangerfichier.domain.services.ReportService;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -35,7 +34,7 @@ public class FileProcessingService {
             OperationFichier operationFichier = createOperationFichier();
             operationFichier.setPathSource(Path.of(filePath));
             String fileName = Path.of(filePath).getFileName().toString();
-            Optional<Path> targetDirectory = catalog.searchTargetDirectory(fileName);
+            Optional<String> targetDirectory = catalog.searchTargetDirectory(fileName);
             //String dossierCible = operationFichier.rechercheCible(catalog);
 
 
@@ -45,7 +44,7 @@ public class FileProcessingService {
             } else {
                 logger.info("Chemin cible : {}", targetDirectory);
                 try {
-                    operationFichier.setPathSource(targetDirectory.get());
+                    operationFichier.setPathCible(Path.of(targetDirectory.get()));
                     operationFichier.deplacement();
                     reportService.append("Déplacé : ")
                             .append(filePath)

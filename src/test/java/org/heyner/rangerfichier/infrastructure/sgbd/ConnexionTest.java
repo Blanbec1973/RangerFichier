@@ -1,7 +1,6 @@
-package model;
+package org.heyner.rangerfichier.infrastructure.sgbd;
 
 import org.heyner.rangerfichier.shared.exceptions.DatabaseAccessException;
-import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

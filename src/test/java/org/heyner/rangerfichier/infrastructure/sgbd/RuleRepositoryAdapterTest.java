@@ -1,7 +1,8 @@
-package model;
+package org.heyner.rangerfichier.infrastructure.sgbd;
 
+import model.RegleRepository;
 import org.heyner.common.Parameter;
-import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
+import org.heyner.rangerfichier.domain.Rule;
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class RegleRepositoryTest {
+class RuleRepositoryAdapterTest {
 
     private Connexion connexion;
     private Parameter parametres;
@@ -42,11 +43,11 @@ class RegleRepositoryTest {
             throw new RuntimeException(e);
         }
 
-        RegleRepository repo = new RegleRepository(parametres, connexion);
-        List<Regle> regles = repo.findAllRegles();
-        assertEquals(1, regles.size());
-        assertEquals("^test.*", regles.get(0).regex());
-        assertEquals("/tmp/", regles.get(0).dossier());
+        RuleRepositoryAdapter repo = new RuleRepositoryAdapter(parametres, connexion);
+        List<Rule> rules = repo.findAllRules();
+        assertEquals(1, rules.size());
+        assertEquals("^test.*", rules.get(0).regex());
+        assertEquals("/tmp/", rules.get(0).destinationDirectory());
     }
     @Test
     void testEmptyTable() {
@@ -56,9 +57,9 @@ class RegleRepositoryTest {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        RegleRepository repo = new RegleRepository(parametres, connexion);
-        List<Regle> regles = repo.findAllRegles();
-        assertEquals(0, regles.size());
+        RuleRepositoryAdapter repo = new RuleRepositoryAdapter(parametres, connexion);
+        List<Rule> rules = repo.findAllRules();
+        assertEquals(0, rules.size());
     }
 
 

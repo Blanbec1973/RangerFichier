@@ -1,6 +1,5 @@
 package org.heyner.rangerfichier.shared.exceptions;
 
-import org.heyner.rangerfichier.shared.exceptions.DatabaseAccessException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

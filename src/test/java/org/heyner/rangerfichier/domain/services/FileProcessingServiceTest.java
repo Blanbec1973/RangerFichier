@@ -1,9 +1,8 @@
-package model;
+package org.heyner.rangerfichier.domain.services;
 
 import org.apache.commons.io.FileUtils;
 import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.domain.Catalog;
-import org.heyner.rangerfichier.domain.services.ReportService;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -104,7 +103,7 @@ class FileProcessingServiceTest {
 
         // IMPORTANT :
         doNothing().when(mockOp).setPathSource(any());
-        when(mockCatalog.searchTargetDirectory(anyString())).thenReturn(Optional.of(Path.of("/tmp/")));
+        when(mockCatalog.searchTargetDirectory(anyString())).thenReturn(Optional.of("/tmp/"));
         //when(mockOp.rechercheCible(mockCatalog)).thenReturn("/tmp/");
         when(mockOp.deplacement()).thenReturn(true);
 
