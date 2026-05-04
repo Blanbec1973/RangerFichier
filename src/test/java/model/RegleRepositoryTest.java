@@ -1,6 +1,7 @@
 package model;
 
 import org.heyner.common.Parameter;
+import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
 import java.sql.SQLException;

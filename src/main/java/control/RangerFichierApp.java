@@ -1,11 +1,13 @@
 package control;
 
 
-import model.Catalogue;
-import model.RegleRepository;
 import model.ReportService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.heyner.rangerfichier.domain.Catalog;
+import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
+import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
+import org.heyner.rangerfichier.infrastructure.sgbd.RuleRepositoryAdapter;
 import view.OptionPaneUI;
 import view.UserInterface;
 import model.FileProcessingService;
@@ -29,10 +31,12 @@ public class RangerFichierApp {
         logger.info("RangerFichier v{}", parametres.getVersion());
 
         UserInterface ui = new OptionPaneUI();
-        RegleRepository regleRepository = new RegleRepository(parametres);
-        Catalogue catalog = new Catalogue();
+        //RegleRepository regleRepository = new RegleRepository(parametres);
+        RuleRepositoryPort ruleRepositoryPort = new RuleRepositoryAdapter(parametres,
+                new Connexion(parametres.getProperty("url")));
+        Catalog catalog = new Catalog(ruleRepositoryPort.findAllRules());
         ReportService reportService = new ReportService();
-        FileProcessingService service = new FileProcessingService(regleRepository, catalog, reportService);
+        FileProcessingService service = new FileProcessingService(catalog, reportService);
 
         // Injection manuelle
         RangerFichierApp app = new RangerFichierApp(ui, service, parametres);
@@ -51,7 +55,6 @@ public class RangerFichierApp {
         }
 
         try {
-            service.loadCatalog();
             service.processFiles(args);
             String report = service.getReport();
             ui.showMessage(report);

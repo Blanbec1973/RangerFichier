@@ -1,5 +1,6 @@
 package model.util;
 
+import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 

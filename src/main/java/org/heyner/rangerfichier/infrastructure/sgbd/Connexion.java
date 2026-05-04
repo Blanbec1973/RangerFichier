@@ -1,4 +1,4 @@
-package model;
+package org.heyner.rangerfichier.infrastructure.sgbd;
 
 import exceptions.DatabaseAccessException;
 import org.apache.logging.log4j.LogManager;

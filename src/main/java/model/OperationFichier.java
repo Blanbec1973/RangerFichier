@@ -1,7 +1,7 @@
 package model;
 
 import exceptions.FileMoveException;
-import model.util.PathNormalizer;
+import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +11,11 @@ import java.nio.file.StandardCopyOption;
 
 public class OperationFichier {
     private Path pathSource;
+
+    public void setPathCible(Path pathCible) {
+        this.pathCible = pathCible;
+    }
+
     private Path pathCible;
     private static final Logger logger = LogManager.getLogger(OperationFichier.class);
 

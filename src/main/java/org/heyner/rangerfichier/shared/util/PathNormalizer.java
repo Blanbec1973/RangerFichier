@@ -1,4 +1,4 @@
-package model.util;
+package org.heyner.rangerfichier.shared.util;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

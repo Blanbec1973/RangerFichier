@@ -1,8 +1,9 @@
-package model;
+package org.heyner.rangerfichier.infrastructure.sgbd;
 
 import exceptions.DatabaseAccessException;
 import org.heyner.common.Parameter;
-import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
+import org.heyner.rangerfichier.domain.Rule;
+import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,34 +11,35 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegleRepository {
+public class RuleRepositoryAdapter implements RuleRepositoryPort {
     private final Connexion connexion;
     private final Parameter parameters;
 
-    public RegleRepository(Parameter parameters, Connexion connexion) {
+    public RuleRepositoryAdapter(Parameter parameters, Connexion connexion) {
         this.parameters = parameters;
         this.connexion = connexion;
     }
 
-    public RegleRepository(Parameter parameters) {
-        this.parameters = parameters;
-        this.connexion = new Connexion(parameters.getProperty("url"));
-        connexion.connect();
-    }
+//    public RuleRepositoryAdapter(Parameter parameters) {
+//        this.parameters = parameters;
+//        this.connexion = new Connexion(parameters.getProperty("url"));
+//        connexion.connect();
+//    }
 
-    public List<Regle> findAllRegles() {
-        List<Regle> regles = new ArrayList<>();
+    @Override
+    public List<Rule> findAllRules() {
+        List<Rule> rules = new ArrayList<>();
         String sql = parameters.getProperty("sql");
         try (Statement stmt = connexion.getConn().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 String regex = rs.getString("REGEX");
-                String dossier = rs.getString("DOSSIERDEST");
-                regles.add(new Regle(regex, dossier));
+                String destinationDirectory = rs.getString("DOSSIERDEST");
+                rules.add(new Rule(regex, destinationDirectory));
             }
         } catch (SQLException e) {
             throw new DatabaseAccessException("Erreur lors de la récupération des règles", e);
         }
-        return regles;
+        return rules;
     }
 }
