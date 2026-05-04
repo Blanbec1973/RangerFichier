@@ -1,6 +1,5 @@
 package org.heyner.rangerfichier.infrastructure.sgbd;
 
-import model.RegleRepository;
 import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.domain.Rule;
 import org.junit.jupiter.api.*;

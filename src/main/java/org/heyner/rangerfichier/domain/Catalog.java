@@ -13,6 +13,7 @@ public class Catalog {
 
     public Catalog(List<Rule> rules) {
         this.rules = List.copyOf(rules);
+        logger.info("Catalog loaded with {} rules", this.getSize());
     }
 
     public Optional<String> searchTargetDirectory(String fileName) {
@@ -27,5 +28,9 @@ public class Catalog {
         }
 
         return trouve ? Optional.of(this.rules.get(i - 1).destinationDirectory()) : Optional.empty();
+    }
+
+    public int getSize() {
+        return rules.size();
     }
 }

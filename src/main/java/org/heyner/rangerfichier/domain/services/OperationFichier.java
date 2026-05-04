@@ -1,6 +1,6 @@
 package org.heyner.rangerfichier.domain.services;
 
-import model.Catalogue;
+import org.heyner.rangerfichier.domain.Catalog;
 import org.heyner.rangerfichier.shared.exceptions.FileMoveException;
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.apache.logging.log4j.LogManager;
@@ -28,8 +28,8 @@ public class OperationFichier {
         return pathSource;
     }
 
-    public String rechercheCible(Catalogue catalogue) {
-        String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
+    public String rechercheCible(Catalog catalog) {
+        String dossierCible = String.valueOf(catalog.searchTargetDirectory(pathSource.getFileName().toString()));
         if (dossierCible != null) {
             Path base = PathNormalizer.normalize(dossierCible);
             pathCible = base.resolve(pathSource.getFileName());

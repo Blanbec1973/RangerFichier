@@ -31,7 +31,6 @@ public class RangerFichierApp {
         logger.info("RangerFichier v{}", parametres.getVersion());
 
         UserInterface ui = new OptionPaneUI();
-        //RegleRepository regleRepository = new RegleRepository(parametres);
         RuleRepositoryPort ruleRepositoryPort = new RuleRepositoryAdapter(parametres,
                 new Connexion(parametres.getProperty("url")));
         Catalog catalog = new Catalog(ruleRepositoryPort.findAllRules());

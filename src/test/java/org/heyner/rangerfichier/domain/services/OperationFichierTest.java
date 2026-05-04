@@ -1,34 +1,26 @@
 package org.heyner.rangerfichier.domain.services;
 
 import org.heyner.rangerfichier.domain.Catalog;
-import org.heyner.rangerfichier.shared.exceptions.FileMoveException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OperationFichierTest {
-    /** Temporary area. */
-    private static OperationFichier operationFichier;
     private static final File TEMP_DIR = new File("target/temp");
     private static final File TEMP_DIR2 = new File("target/temp2");
     /** Name of the temporary XML file. */
     private static final String FILE_NAME = "dumpfile.txt";
     @Mock
-    private Catalog mockCatalogue;
+    private Catalog mockCatalog;
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        operationFichier = new OperationFichier();
+        OperationFichier operationFichier = new OperationFichier();
         TEMP_DIR.mkdirs();
         TEMP_DIR2.mkdirs();
         File file = new File(TEMP_DIR,FILE_NAME);

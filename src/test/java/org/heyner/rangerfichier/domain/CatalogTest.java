@@ -26,6 +26,7 @@ class CatalogTest {
                 catalog.searchTargetDirectory("note_de_frais.pdf"));
         assertEquals(Optional.empty(),
                 catalog.searchTargetDirectory("autre.docx"));
+        assertEquals(2, catalog.getSize());
     }
 
 //    @Test
