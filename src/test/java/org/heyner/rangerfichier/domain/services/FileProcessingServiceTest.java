@@ -22,9 +22,11 @@ class FileProcessingServiceTest {
         Parameter mockParam = mock(Parameter.class);
         Catalog mockCatalog = mock(Catalog.class);
         ReportService mockReportService = mock(ReportService.class);
+        OperationFichier mockOperationFichier = mock(OperationFichier.class);
 
         when(mockParam.getProperty("sql")).thenReturn("SELECT * FROM REGLES");
-        FileProcessingService service = new FileProcessingService(mockCatalog, mockReportService);
+        FileProcessingService service = new FileProcessingService(mockCatalog,
+                mockReportService, mockOperationFichier);
 
         new File("target/temp").mkdir();
         new File("target/temp/in").mkdir();
@@ -53,9 +55,11 @@ class FileProcessingServiceTest {
     void testProcessFiles_NoMatch() {
         ReportService mockReport = mock(ReportService.class);
         Catalog mockCatalog = mock(Catalog.class);
+        OperationFichier mockOperationFichier = mock(OperationFichier.class);
         when(mockReport.append(anyString())).thenReturn(mockReport);
 
-        FileProcessingService service = new FileProcessingService(mockCatalog, mockReport);
+        FileProcessingService service = new FileProcessingService(mockCatalog,
+                mockReport,  mockOperationFichier);
         service.processFiles(new String[]{"toto.pdf"});
 
         verify(mockReport).append("Pas de correspondance pour : ");
@@ -91,21 +95,20 @@ class FileProcessingServiceTest {
     void testProcessFiles_MoveSuccess() {
         ReportService mockReport = mock(ReportService.class);
         Catalog mockCatalog = mock(Catalog.class);
+        OperationFichier mockOperationFichier = mock(OperationFichier.class);
 
         // append chaining
         when(mockReport.append(anyString())).thenReturn(mockReport);
 
-        FileProcessingService fps = spy(new FileProcessingService(mockCatalog, mockReport));
-        OperationFichier mockOp = mock(OperationFichier.class);
+        FileProcessingService fps = spy(new FileProcessingService(mockCatalog,
+                mockReport, mockOperationFichier));
 
-        // On remplace l’instance créée par FileProcessingService
-        doReturn(mockOp).when(fps).createOperationFichier();
 
         // IMPORTANT :
         //doNothing().when(mockOp).setPathSource(any());
         when(mockCatalog.searchTargetDirectory(anyString())).thenReturn(Optional.of("/tmp/"));
         //when(mockOp.rechercheCible(mockCatalog)).thenReturn("/tmp/");
-        doNothing().when(mockOp).move(any(Path.class), any(Path.class));
+        doNothing().when(mockOperationFichier).move(any(Path.class), any(Path.class));
 
         fps.processFiles(new String[]{"doc.txt"});
 
@@ -117,10 +120,12 @@ class FileProcessingServiceTest {
     void testGetReport() {
         ReportService mockReport = mock(ReportService.class);
         Catalog mockCatalog = mock(Catalog.class);
+        OperationFichier mockOperationFichier = mock(OperationFichier.class);
 
         when(mockReport.getReport()).thenReturn("Mon Rapport");
 
-        FileProcessingService fps = new FileProcessingService(mockCatalog, mockReport);
+        FileProcessingService fps = new FileProcessingService(mockCatalog,
+                mockReport,  mockOperationFichier);
 
         assertEquals("Mon Rapport", fps.getReport());
     }

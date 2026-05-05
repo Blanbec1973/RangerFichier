@@ -1,7 +1,7 @@
 package org.heyner.rangerfichier.domain.services;
 
 public class ReportService {
-    StringBuilder rapport = new StringBuilder();
+    private StringBuilder rapport = new StringBuilder();
 
     public ReportService append(String text) {
         rapport.append(text);
@@ -18,4 +18,7 @@ public class ReportService {
 
     public String getReport() { return rapport.toString();}
 
+    public void clear() {
+        rapport = new StringBuilder();
+    }
 }

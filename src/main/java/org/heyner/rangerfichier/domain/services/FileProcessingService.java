@@ -14,17 +14,14 @@ public class FileProcessingService {
 
     private final Catalog catalog;
     private final ReportService reportService;
+    private final OperationFichier operationFichier;
 
-    public FileProcessingService( Catalog catalog,
-                                 ReportService reportService) {
+    public FileProcessingService(Catalog catalog,
+                                 ReportService reportService, OperationFichier operationFichier) {
         this.catalog = catalog;
         this.reportService = reportService;
+        this.operationFichier = operationFichier;
     }
-
-    protected OperationFichier createOperationFichier() {
-        return new OperationFichier();
-    }
-
 
     /**
      * Traite les fichiers et retourne un rapport.
@@ -33,7 +30,6 @@ public class FileProcessingService {
         int nbDeplacements = 0;
 
         for (String filePath : filePaths) {
-            OperationFichier operationFichier = createOperationFichier();
             //operationFichier.setPathSource(Path.of(filePath));
             Path source = Path.of(filePath);
             String fileName = source.getFileName().toString();
@@ -49,8 +45,6 @@ public class FileProcessingService {
                 try {
                     Path destinationDirectory = PathNormalizer.normalize(targetDirectory.get());
                     operationFichier.move(source, destinationDirectory);
-                    //operationFichier.setPathCible(Path.of(targetDirectory.get()));
-                    //operationFichier.deplacement();
                     reportService.append("Déplacé : ")
                             .append(filePath)
                             .append(" -> ")

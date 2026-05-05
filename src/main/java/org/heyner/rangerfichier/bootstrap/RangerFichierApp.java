@@ -27,20 +27,9 @@ public class RangerFichierApp {
     }
 
     public static void main(String[] args) {
-        ParameterFactory parameterFactory = new ParameterFactory();
-        parameterFactory.load();
-        Parameter parametres = parameterFactory.getParameter();
-        logger.info("RangerFichier v{}", parametres.getVersion());
-
-        UserInterface ui = new OptionPaneUI();
-        RuleRepositoryPort ruleRepositoryPort = new RuleRepositoryAdapter(parametres,
-                new Connexion(parametres.getProperty("url")));
-        Catalog catalog = new Catalog(ruleRepositoryPort.findAllRules());
-        ReportService reportService = new ReportService();
-        FileProcessingService service = new FileProcessingService(catalog, reportService);
 
         // Injection manuelle
-        RangerFichierApp app = new RangerFichierApp(ui, service, parametres);
+        RangerFichierApp app = new BootStrapFactory().initialize();
         app.run(args);
     }
 
