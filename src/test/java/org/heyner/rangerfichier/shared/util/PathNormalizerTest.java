@@ -48,4 +48,10 @@ class PathNormalizerTest {
 
         assertThrows(IllegalArgumentException.class, () -> normalizer.normalize(" "));
     }
+
+//    @Test
+//    void normalizeWithInvalidPathThrowsException() {
+//        PathNormalizer normalizer = new PathNormalizer(() -> "C:/Users/testuser");
+//        assertThrows(IllegalArgumentException.class, () -> normalizer.normalize(";InvalidPath"));
+//    }
 }

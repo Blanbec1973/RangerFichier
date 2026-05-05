@@ -11,6 +11,7 @@ import org.heyner.rangerfichier.domain.services.ReportBuilder;
 import org.heyner.rangerfichier.infrastructure.config.ConfigLoader;
 import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 import org.heyner.rangerfichier.infrastructure.sgbd.RuleRepositoryAdapter;
+import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import ui.OptionPaneUI;
 import ui.UserInterface;
 
@@ -33,9 +34,11 @@ public class BootStrap {
 
         ReportBuilder reportBuilder = new ReportBuilder();
         OperationFichier operationFichier = new OperationFichier();
+        PathNormalizer normalizer = new PathNormalizer(() -> System.getProperty("user.home"));
         FileProcessingService service = new FileProcessingService(catalog,
                 reportBuilder,
-                operationFichier);
+                operationFichier,
+                normalizer);
 
         return new RangerFichierApp(ui, service, parameters);
     }

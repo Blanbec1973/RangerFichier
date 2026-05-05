@@ -1,24 +1,24 @@
 package org.heyner.rangerfichier.domain.services;
 
 public class ReportBuilder {
-    private StringBuilder rapport = new StringBuilder();
+    private final StringBuilder report = new StringBuilder();
 
     public ReportBuilder append(String text) {
-        rapport.append(text);
+        report.append(text);
         return this;
     }
 
     public void addTotalReport(int moveCounter) {
         if (moveCounter == 0) {
-            rapport.append("Aucun fichier déplacé.");
+            report.append("Aucun fichier déplacé.");
         } else {
-            rapport.append(moveCounter).append(" fichier(s) déplacé(s).");
+            report.append(moveCounter).append(" fichier(s) déplacé(s).");
         }
     }
 
-    public String getReport() { return rapport.toString();}
+    public String getReport() { return report.toString();}
 
     public void clear() {
-        rapport = new StringBuilder();
+        report.setLength(0);
     }
 }

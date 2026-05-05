@@ -15,12 +15,14 @@ public class FileProcessingService {
     private final Catalog catalog;
     private final ReportBuilder reportBuilder;
     private final OperationFichier operationFichier;
+    private final PathNormalizer pathNormalizer;
 
     public FileProcessingService(Catalog catalog,
-                                 ReportBuilder reportBuilder, OperationFichier operationFichier) {
+                                 ReportBuilder reportBuilder, OperationFichier operationFichier, PathNormalizer pathNormalizer) {
         this.catalog = catalog;
         this.reportBuilder = reportBuilder;
         this.operationFichier = operationFichier;
+        this.pathNormalizer = pathNormalizer;
     }
 
     /**
@@ -41,17 +43,16 @@ public class FileProcessingService {
                 reportBuilder.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
-                logger.info("Chemin cible : {}", targetDirectory);
+                logger.info("Target directory : {}", targetDirectory.get());
                 try {
-                    PathNormalizer normalizer = new PathNormalizer(() -> System.getProperty("user.home"));
-                    Path targetDirectory2 = normalizer.normalize(targetDirectory.get());
+                    Path targetDirectory2 = pathNormalizer.normalize(targetDirectory.get());
                     operationFichier.move(source, targetDirectory2);
                     reportBuilder.append("Déplacé : ")
                             .append(filePath)
                             .append(" -> ")
                             .append(targetDirectory.toString())
                             .append("\n");
-                    logger.info("Déplacé vers : {}", targetDirectory);
+                    logger.info("Moved to : {}", targetDirectory.get());
                     nbDeplacements++;
                 } catch (FileMoveException e) {
                     reportBuilder.append("ERREUR : ")

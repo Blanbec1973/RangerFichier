@@ -13,7 +13,7 @@ public class OperationFichier {
 
     private static final Logger logger = LogManager.getLogger(OperationFichier.class);
 
-    public void move(Path source, Path targetDirectory) {
+    public Path move(Path source, Path targetDirectory) {
         try {
             Path targetFile = targetDirectory.resolve(source.getFileName());
             Files.createDirectories(targetFile.getParent());
@@ -24,5 +24,6 @@ public class OperationFichier {
             throw new FileMoveException(
                     "Impossible de déplacer le fichier : " + source.getFileName(), e);
         }
+        return targetDirectory;
     }
 }

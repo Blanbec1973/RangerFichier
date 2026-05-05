@@ -3,6 +3,7 @@ package org.heyner.rangerfichier.domain.services;
 import org.apache.commons.io.FileUtils;
 import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.domain.Catalog;
+import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -23,10 +24,11 @@ class FileProcessingServiceTest {
         Catalog mockCatalog = mock(Catalog.class);
         ReportBuilder mockReportBuilder = mock(ReportBuilder.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
+        PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
 
         when(mockParam.getProperty("sql")).thenReturn("SELECT * FROM REGLES");
         FileProcessingService service = new FileProcessingService(mockCatalog,
-                mockReportBuilder, mockOperationFichier);
+                mockReportBuilder, mockOperationFichier, mockPathNormalizer);
 
         new File("target/temp").mkdir();
         new File("target/temp/in").mkdir();
@@ -56,10 +58,11 @@ class FileProcessingServiceTest {
         ReportBuilder mockReport = mock(ReportBuilder.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
+        PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
         when(mockReport.append(anyString())).thenReturn(mockReport);
 
         FileProcessingService service = new FileProcessingService(mockCatalog,
-                mockReport,  mockOperationFichier);
+                mockReport,  mockOperationFichier,  mockPathNormalizer);
         service.processFiles(new String[]{"toto.pdf"});
 
         verify(mockReport).append("Pas de correspondance pour : ");
@@ -96,19 +99,20 @@ class FileProcessingServiceTest {
         ReportBuilder mockReport = mock(ReportBuilder.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
+        PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
 
         // append chaining
         when(mockReport.append(anyString())).thenReturn(mockReport);
 
         FileProcessingService fps = spy(new FileProcessingService(mockCatalog,
-                mockReport, mockOperationFichier));
+                mockReport, mockOperationFichier,  mockPathNormalizer));
 
 
         // IMPORTANT :
         //doNothing().when(mockOp).setPathSource(any());
         when(mockCatalog.searchTargetDirectory(anyString())).thenReturn(Optional.of("/tmp/"));
         //when(mockOp.rechercheCible(mockCatalog)).thenReturn("/tmp/");
-        doNothing().when(mockOperationFichier).move(any(Path.class), any(Path.class));
+        //doNothing().when(mockOperationFichier).move(any(Path.class), any(Path.class));
 
         fps.processFiles(new String[]{"doc.txt"});
 
@@ -121,11 +125,12 @@ class FileProcessingServiceTest {
         ReportBuilder mockReport = mock(ReportBuilder.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
+        PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
 
         when(mockReport.getReport()).thenReturn("Mon Rapport");
 
         FileProcessingService fps = new FileProcessingService(mockCatalog,
-                mockReport,  mockOperationFichier);
+                mockReport,  mockOperationFichier,   mockPathNormalizer);
 
         assertEquals("Mon Rapport", fps.getReport());
     }
