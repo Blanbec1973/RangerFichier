@@ -1,6 +1,6 @@
 package org.heyner.rangerfichier.bootstrap;
 
-import view.UserInterface;
+import ui.UserInterface;
 import org.heyner.rangerfichier.domain.services.FileProcessingService;
 import org.heyner.common.Parameter;
 import org.junit.jupiter.api.Test;

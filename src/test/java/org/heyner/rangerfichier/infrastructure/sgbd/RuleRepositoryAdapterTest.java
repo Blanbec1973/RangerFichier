@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 class RuleRepositoryAdapterTest {
 
     private Connexion connexion;
-    private Parameter parametres;
+    private Parameter parameters;
 
     @BeforeEach
     void setUp()  {
@@ -22,8 +22,8 @@ class RuleRepositoryAdapterTest {
         connexion.connect();
 
         // Mock ou stub de Parameter pour fournir la requête SQL
-        parametres = mock(Parameter.class);
-        when(parametres.getProperty("sql")).thenReturn("SELECT REGEX, DOSSIERDEST FROM REGLES");
+        parameters = mock(Parameter.class);
+        when(parameters.getProperty("sql")).thenReturn("SELECT REGEX, DOSSIERDEST FROM REGLES");
     }
 
     @AfterEach
@@ -42,11 +42,11 @@ class RuleRepositoryAdapterTest {
             throw new RuntimeException(e);
         }
 
-        RuleRepositoryAdapter repo = new RuleRepositoryAdapter(parametres, connexion);
+        RuleRepositoryAdapter repo = new RuleRepositoryAdapter(parameters, connexion);
         List<Rule> rules = repo.findAllRules();
         assertEquals(1, rules.size());
         assertEquals("^test.*", rules.get(0).regex());
-        assertEquals("/tmp/", rules.get(0).destinationDirectory());
+        assertEquals("/tmp/", rules.get(0).targetDirectory());
     }
     @Test
     void testEmptyTable() {
@@ -56,7 +56,7 @@ class RuleRepositoryAdapterTest {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        RuleRepositoryAdapter repo = new RuleRepositoryAdapter(parametres, connexion);
+        RuleRepositoryAdapter repo = new RuleRepositoryAdapter(parameters, connexion);
         List<Rule> rules = repo.findAllRules();
         assertEquals(0, rules.size());
     }

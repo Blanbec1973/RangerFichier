@@ -1,9 +1,9 @@
 package org.heyner.rangerfichier.domain.services;
 
-public class ReportService {
+public class ReportBuilder {
     private StringBuilder rapport = new StringBuilder();
 
-    public ReportService append(String text) {
+    public ReportBuilder append(String text) {
         rapport.append(text);
         return this;
     }

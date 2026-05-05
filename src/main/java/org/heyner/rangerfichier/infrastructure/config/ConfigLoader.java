@@ -7,8 +7,8 @@ import org.heyner.common.Parameter;
 import java.io.File;
 import java.net.URISyntaxException;
 
-public class ParameterFactory {
-    private static final Logger logger = LogManager.getLogger(ParameterFactory.class);
+public class ConfigLoader {
+    private static final Logger logger = LogManager.getLogger(ConfigLoader.class);
     Parameter parameter;
 
     public Parameter getParameter() {
@@ -19,7 +19,7 @@ public class ParameterFactory {
         boolean loaded = false;
         try {
             logger.debug("Début try");
-            String jarDir = new File(ParameterFactory.class.getProtectionDomain()
+            String jarDir = new File(ConfigLoader.class.getProtectionDomain()
                                                      .getCodeSource()
                                                      .getLocation()
                                                      .toURI())

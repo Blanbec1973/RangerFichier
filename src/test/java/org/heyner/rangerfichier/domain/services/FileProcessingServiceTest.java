@@ -21,12 +21,12 @@ class FileProcessingServiceTest {
     void setUp() throws IOException {
         Parameter mockParam = mock(Parameter.class);
         Catalog mockCatalog = mock(Catalog.class);
-        ReportService mockReportService = mock(ReportService.class);
+        ReportBuilder mockReportBuilder = mock(ReportBuilder.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
 
         when(mockParam.getProperty("sql")).thenReturn("SELECT * FROM REGLES");
         FileProcessingService service = new FileProcessingService(mockCatalog,
-                mockReportService, mockOperationFichier);
+                mockReportBuilder, mockOperationFichier);
 
         new File("target/temp").mkdir();
         new File("target/temp/in").mkdir();
@@ -41,7 +41,7 @@ class FileProcessingServiceTest {
 
 //    @Test
 //    void testLoadCatalog() {
-//        ReportService mockReport = mock(ReportService.class);
+//        ReportBuilder mockReport = mock(ReportBuilder.class);
 //        Catalog mockCatalog = mock(Catalog.class);
 //        RuleRepositoryPort mockRepo = mock(RuleRepositoryPort.class);
 //
@@ -53,7 +53,7 @@ class FileProcessingServiceTest {
 
     @Test
     void testProcessFiles_NoMatch() {
-        ReportService mockReport = mock(ReportService.class);
+        ReportBuilder mockReport = mock(ReportBuilder.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
         when(mockReport.append(anyString())).thenReturn(mockReport);
@@ -70,7 +70,7 @@ class FileProcessingServiceTest {
 
 //    @Test
 //    void testProcessFiles_MoveFails() {
-//        ReportService mockReport = mock(ReportService.class);
+//        ReportBuilder mockReport = mock(ReportBuilder.class);
 //        Catalog mockCatalog = mock(Catalog.class);
 //        RuleRepositoryPort mockRepo = mock(RuleRepositoryPort.class);
 //
@@ -93,7 +93,7 @@ class FileProcessingServiceTest {
 //    }
     @Test
     void testProcessFiles_MoveSuccess() {
-        ReportService mockReport = mock(ReportService.class);
+        ReportBuilder mockReport = mock(ReportBuilder.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
 
@@ -118,7 +118,7 @@ class FileProcessingServiceTest {
 
     @Test
     void testGetReport() {
-        ReportService mockReport = mock(ReportService.class);
+        ReportBuilder mockReport = mock(ReportBuilder.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
 

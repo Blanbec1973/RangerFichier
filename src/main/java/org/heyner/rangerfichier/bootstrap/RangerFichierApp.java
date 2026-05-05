@@ -1,16 +1,8 @@
 package org.heyner.rangerfichier.bootstrap;
 
-
-import org.heyner.rangerfichier.domain.services.ReportService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.heyner.rangerfichier.domain.Catalog;
-import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
-import org.heyner.rangerfichier.infrastructure.config.ParameterFactory;
-import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
-import org.heyner.rangerfichier.infrastructure.sgbd.RuleRepositoryAdapter;
-import view.OptionPaneUI;
-import view.UserInterface;
+import ui.UserInterface;
 import org.heyner.rangerfichier.domain.services.FileProcessingService;
 import org.heyner.common.Parameter;
 
@@ -18,18 +10,18 @@ public class RangerFichierApp {
     private static final Logger logger = LogManager.getLogger(RangerFichierApp.class);
     private final UserInterface ui;
     private final FileProcessingService service;
-    private final Parameter parametres;
+    private final Parameter parameter;
 
-    public RangerFichierApp(UserInterface ui, FileProcessingService service, Parameter parametres) {
+    public RangerFichierApp(UserInterface ui, FileProcessingService service, Parameter parameter) {
         this.ui = ui;
         this.service = service;
-        this.parametres = parametres;
+        this.parameter = parameter;
     }
 
     public static void main(String[] args) {
 
         // Injection manuelle
-        RangerFichierApp app = new BootStrapFactory().initialize();
+        RangerFichierApp app = new BootStrap().createApp();
         app.run(args);
     }
 
@@ -38,7 +30,7 @@ public class RangerFichierApp {
      */
      void run(String[] args) {
         if (args == null || args.length == 0) {
-            String msg = parametres.getProperty("MsgErrNoFile");
+            String msg = parameter.getProperty("MsgErrNoFile");
             logger.error(msg);
             ui.showMessage(msg);
             return;

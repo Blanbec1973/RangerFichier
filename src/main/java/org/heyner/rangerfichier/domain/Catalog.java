@@ -18,16 +18,16 @@ public class Catalog {
 
     public Optional<String> searchTargetDirectory(String fileName) {
         int i = 0;
-        boolean trouve = false;
-        logger.info("File to parse with regexs : {}", fileName);
-        while (i < this.rules.size() && !trouve) {
-            trouve = fileName.matches(this.rules.get(i).regex());
-            String str = "i : " + i + " " + this.rules.get(i).regex() + " " + trouve;
+        boolean found = false;
+        logger.info("File to parse with regexes : {}", fileName);
+        while (i < this.rules.size() && !found) {
+            found = fileName.matches(this.rules.get(i).regex());
+            String str = "i : " + i + " " + this.rules.get(i).regex() + " " + found;
             logger.info(str);
             i = i + 1;
         }
 
-        return trouve ? Optional.of(this.rules.get(i - 1).destinationDirectory()) : Optional.empty();
+        return found ? Optional.of(this.rules.get(i - 1).targetDirectory()) : Optional.empty();
     }
 
     public int getSize() {

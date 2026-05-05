@@ -34,8 +34,8 @@ public class RuleRepositoryAdapter implements RuleRepositoryPort {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 String regex = rs.getString("REGEX");
-                String destinationDirectory = rs.getString("DOSSIERDEST");
-                rules.add(new Rule(regex, destinationDirectory));
+                String targetDirectory = rs.getString("DOSSIERDEST");
+                rules.add(new Rule(regex, targetDirectory));
             }
         } catch (SQLException e) {
             throw new DatabaseAccessException("Erreur lors de la récupération des règles", e);

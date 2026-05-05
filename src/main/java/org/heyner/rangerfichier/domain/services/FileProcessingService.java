@@ -6,20 +6,19 @@ import org.heyner.rangerfichier.domain.Catalog;
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 public class FileProcessingService {
     private static final Logger logger = LogManager.getLogger(FileProcessingService.class);
 
     private final Catalog catalog;
-    private final ReportService reportService;
+    private final ReportBuilder reportBuilder;
     private final OperationFichier operationFichier;
 
     public FileProcessingService(Catalog catalog,
-                                 ReportService reportService, OperationFichier operationFichier) {
+                                 ReportBuilder reportBuilder, OperationFichier operationFichier) {
         this.catalog = catalog;
-        this.reportService = reportService;
+        this.reportBuilder = reportBuilder;
         this.operationFichier = operationFichier;
     }
 
@@ -38,14 +37,14 @@ public class FileProcessingService {
 
 
             if (targetDirectory.isEmpty()) {
-                reportService.append("Pas de correspondance pour : ").append(filePath).append("\n");
+                reportBuilder.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
                 logger.info("Chemin cible : {}", targetDirectory);
                 try {
-                    Path destinationDirectory = PathNormalizer.normalize(targetDirectory.get());
-                    operationFichier.move(source, destinationDirectory);
-                    reportService.append("Déplacé : ")
+                    Path targetDirectory2 = PathNormalizer.normalize(targetDirectory.get());
+                    operationFichier.move(source, targetDirectory2);
+                    reportBuilder.append("Déplacé : ")
                             .append(filePath)
                             .append(" -> ")
                             .append(targetDirectory.toString())
@@ -53,7 +52,7 @@ public class FileProcessingService {
                     logger.info("Déplacé vers : {}", targetDirectory);
                     nbDeplacements++;
                 } catch (Exception e) {
-                    reportService.append("ERREUR : ")
+                    reportBuilder.append("ERREUR : ")
                             .append(filePath)
                             .append(" -> ")
                             .append(e.getMessage())
@@ -62,10 +61,10 @@ public class FileProcessingService {
                 }
             }
         }
-        reportService.addTotalReport(nbDeplacements);
+        reportBuilder.addTotalReport(nbDeplacements);
 
     }
 
-    public String getReport() { return reportService.getReport();
+    public String getReport() { return reportBuilder.getReport();
     }
 }
