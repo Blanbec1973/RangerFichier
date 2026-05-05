@@ -32,12 +32,9 @@ public class FileProcessingService {
         int nbDeplacements = 0;
 
         for (String filePath : filePaths) {
-            //operationFichier.setPathSource(Path.of(filePath));
             Path source = Path.of(filePath);
             String fileName = source.getFileName().toString();
             Optional<String> targetDirectory = catalog.searchTargetDirectory(fileName);
-            //String dossierCible = operationFichier.rechercheCible(catalog);
-
 
             if (targetDirectory.isEmpty()) {
                 reportBuilder.append("Pas de correspondance pour : ").append(filePath).append("\n");

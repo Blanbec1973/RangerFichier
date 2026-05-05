@@ -1,7 +1,6 @@
 package org.heyner.rangerfichier.domain.services;
 
 import org.apache.commons.io.FileUtils;
-import org.heyner.common.Parameter;
 import org.heyner.rangerfichier.domain.Catalog;
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import org.junit.jupiter.api.*;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -20,16 +18,6 @@ class FileProcessingServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        Parameter mockParam = mock(Parameter.class);
-        Catalog mockCatalog = mock(Catalog.class);
-        ReportBuilder mockReportBuilder = mock(ReportBuilder.class);
-        OperationFichier mockOperationFichier = mock(OperationFichier.class);
-        PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
-
-        when(mockParam.getProperty("sql")).thenReturn("SELECT * FROM REGLES");
-        FileProcessingService service = new FileProcessingService(mockCatalog,
-                mockReportBuilder, mockOperationFichier, mockPathNormalizer);
-
         new File("target/temp").mkdir();
         new File("target/temp/in").mkdir();
         new File("target/temp/out").mkdir();
@@ -40,18 +28,6 @@ class FileProcessingServiceTest {
         File f = new File("target/temp/in/toto.txt");
         f.createNewFile();
     }
-
-//    @Test
-//    void testLoadCatalog() {
-//        ReportBuilder mockReport = mock(ReportBuilder.class);
-//        Catalog mockCatalog = mock(Catalog.class);
-//        RuleRepositoryPort mockRepo = mock(RuleRepositoryPort.class);
-//
-//        FileProcessingService service = new FileProcessingService(mockRepo, mockCatalog, mockReport);
-//        service.loadCatalog();
-//
-//        verify(mockCatalog).chargerDepuisRepository(mockRepo);
-//    }
 
     @Test
     void testProcessFiles_NoMatch() {
@@ -70,30 +46,6 @@ class FileProcessingServiceTest {
         verify(mockReport).addTotalReport(0);
     }
 
-
-//    @Test
-//    void testProcessFiles_MoveFails() {
-//        ReportBuilder mockReport = mock(ReportBuilder.class);
-//        Catalog mockCatalog = mock(Catalog.class);
-//        RuleRepositoryPort mockRepo = mock(RuleRepositoryPort.class);
-//
-//        FileProcessingService fps = spy(new FileProcessingService(mockRepo, mockCatalog, mockReport));
-//
-//        OperationFichier mockOp = mock(OperationFichier.class);
-//        doReturn(mockOp).when(fps).createOperationFichier();
-//
-//        when(mockReport.append(anyString())).thenReturn(mockReport);
-//
-//        // IMPORTANT
-//        doNothing().when(mockOp).setPathSource(any());
-//        //when(mockOp.rechercheCible(mockCatalog)).thenReturn("/tmp/");
-//        when(mockOp.deplacement()).thenReturn(false);
-//
-//        fps.processFiles(new String[]{"fichier.pdf"});
-//
-//        verify(mockReport).append("Échec du déplacement : ");
-//        verify(mockReport).addTotalReport(0);
-//    }
     @Test
     void testProcessFiles_MoveSuccess() {
         ReportBuilder mockReport = mock(ReportBuilder.class);
@@ -101,18 +53,12 @@ class FileProcessingServiceTest {
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
         PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
 
-        // append chaining
         when(mockReport.append(anyString())).thenReturn(mockReport);
 
         FileProcessingService fps = spy(new FileProcessingService(mockCatalog,
                 mockReport, mockOperationFichier,  mockPathNormalizer));
 
-
-        // IMPORTANT :
-        //doNothing().when(mockOp).setPathSource(any());
         when(mockCatalog.searchTargetDirectory(anyString())).thenReturn(Optional.of("/tmp/"));
-        //when(mockOp.rechercheCible(mockCatalog)).thenReturn("/tmp/");
-        //doNothing().when(mockOperationFichier).move(any(Path.class), any(Path.class));
 
         fps.processFiles(new String[]{"doc.txt"});
 

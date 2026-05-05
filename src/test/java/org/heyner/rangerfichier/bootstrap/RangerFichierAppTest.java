@@ -22,11 +22,8 @@ class RangerFichierAppTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        //noinspection ResultOfMethodCallIgnored
         TEMP_SOURCE.mkdirs();
-        //noinspection ResultOfMethodCallIgnored
         TEMP_TARGET.mkdirs();
-        // Créer un fichier de test
         File testFile = new File(TEMP_SOURCE, TEST_FILE);
         OutputStream outputStream = new FileOutputStream(testFile);
         outputStream.write("Test content".getBytes());
@@ -35,20 +32,17 @@ class RangerFichierAppTest {
 
     @AfterEach
     void tearDown() {
-        // Nettoyer les fichiers de test
+
         File testFile = new File(TEMP_SOURCE, TEST_FILE);
         if (testFile.exists()) {
-            //noinspection ResultOfMethodCallIgnored
             testFile.delete();
         }
         File targetFile = new File(TEMP_TARGET, TEST_FILE);
         if (targetFile.exists()) {
-            //noinspection ResultOfMethodCallIgnored
             targetFile.delete();
         }
-        //noinspection ResultOfMethodCallIgnored
+
         TEMP_SOURCE.delete();
-        //noinspection ResultOfMethodCallIgnored
         TEMP_TARGET.delete();
     }
 
@@ -94,20 +88,6 @@ class RangerFichierAppTest {
         verify(mockService).processFiles(any());
         verify(mockUI).showMessage("Report OK");
     }
-
-//    @Test
-//    void testRunWithException() {
-//        UserInterface mockUI = mock(UserInterface.class);
-//        FileProcessingService mockService = mock(FileProcessingService.class);
-//        Parameter mockParam = mock(Parameter.class);
-//
-//        doThrow(new RuntimeException("Erreur simulée")).when(mockService).loadCatalog();
-//
-//        RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-//        app.run(new String[]{"file.txt"});
-//
-//        verify(mockUI).showMessage("Erreur critique : Erreur simulée");
-//    }
 
     @Test
     void testRunWithNoRulesFound() {

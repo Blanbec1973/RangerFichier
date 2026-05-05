@@ -20,12 +20,6 @@ public class RuleRepositoryAdapter implements RuleRepositoryPort {
         this.connexion = connexion;
     }
 
-//    public RuleRepositoryAdapter(Parameter parameters) {
-//        this.parameters = parameters;
-//        this.connexion = new Connexion(parameters.getProperty("url"));
-//        connexion.connect();
-//    }
-
     @Override
     public List<Rule> findAllRules() {
         List<Rule> rules = new ArrayList<>();

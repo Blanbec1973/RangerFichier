@@ -19,7 +19,6 @@ class ConfigLoaderTest {
     void setUp() throws Exception {
         jarDir = getJarDirForConfigLoader();
         externalConfigPath = jarDir.resolve("config.properties");
-        // Nettoyage préventif (si un run précédent a laissé le fichier)
         Files.deleteIfExists(externalConfigPath);
     }
 
@@ -44,9 +43,6 @@ class ConfigLoaderTest {
         assertNotNull(p, "Parameter doit être initialisé quand le fichier externe existe");
         assertTrue(Files.exists(externalConfigPath), "Le fichier externe doit exister pour ce test");
 
-        // Bonus (optionnel) : si Parameter#toString contient le chemin, utile pour valider la branche.
-        // On ne l'impose pas car on ne connaît pas l'implémentation exacte de Parameter.
-        // assertTrue(p.toString().contains(externalConfigPath.toString()));
     }
 
     @Test

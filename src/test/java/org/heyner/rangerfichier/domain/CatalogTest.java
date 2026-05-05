@@ -3,6 +3,7 @@ package org.heyner.rangerfichier.domain;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +14,10 @@ class CatalogTest {
     @Test
     void testRechercheDossierCible() {
         // Prépare des règles de test
-        Rule Rule1 = new Rule("^facture.*\\.pdf$", "/factures/");
-        Rule Rule2 = new Rule("^note.*\\.pdf$", "/notes/");
+        Rule rule1 = new Rule("^facture.*\\.pdf$", "/factures/");
+        Rule rule2 = new Rule("^note.*\\.pdf$", "/notes/");
 
-        List<Rule> rules = Arrays.asList(Rule1, Rule2);
+        List<Rule> rules = Arrays.asList(rule1, rule2);
 
         Catalog catalog = new Catalog(rules);
 
@@ -29,12 +30,12 @@ class CatalogTest {
         assertEquals(2, catalog.getSize());
     }
 
-//    @Test
-//    void testCatalogEmpty() {
-//        Catalog catalogue = new Catalog();
-//        when(mockRepo.findAllRules()).thenReturn(Collections.emptyList());
-//        assertDoesNotThrow(() -> catalogue.chargerDepuisRepository(mockRepo));
-//    }
+    @Test
+    void testCatalogEmpty() {
+        Catalog catalogue = new Catalog(Collections.emptyList());
+        assertEquals(0, catalogue.getSize());
+        assertEquals(Optional.empty(), catalogue.searchTargetDirectory("anyfile.txt"));
+    }
 
 
 }
