@@ -1,141 +1,32 @@
 package org.heyner.rangerfichier.domain.services;
 
-import org.heyner.rangerfichier.domain.Catalog;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class OperationFichierTest {
-    private static final File TEMP_DIR = new File("target/temp");
-    private static final File TEMP_DIR2 = new File("target/temp2");
-    /** Name of the temporary XML file. */
-    private static final String FILE_NAME = "dumpfile.txt";
-    @Mock
-    private Catalog mockCatalog;
 
-    @BeforeAll
-    static void beforeAll() throws IOException {
-        OperationFichier operationFichier = new OperationFichier();
-        TEMP_DIR.mkdirs();
-        TEMP_DIR2.mkdirs();
-        File file = new File(TEMP_DIR,FILE_NAME);
-        OutputStream outputStream = new FileOutputStream(file);
-        outputStream.write(FILE_NAME.getBytes());
-        outputStream.close();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        File file = new File(TEMP_DIR2+"/"+FILE_NAME);
-        file.delete();
-        File directory1 = new File(String.valueOf(TEMP_DIR2));
-        directory1.delete();
-        File directory2 = new File(String.valueOf(TEMP_DIR));
-        directory2.delete();
-    }
+    @TempDir
+    Path tempDir;
 
     @Test
     void moveShouldTransferFileToTargetDirectory() throws IOException {
-        Path source = Path.of("target/temp/in/toto.txt");
-        Path targetDir = Path.of("target/temp/out");
+        Path inDir = tempDir.resolve("in");
+        Path outDir = tempDir.resolve("out");
+
+        Path source = inDir.resolve("toto.txt");
+        Files.createDirectories(inDir);
+        Files.writeString(source, "hello");
 
         OperationFichier op = new OperationFichier();
-        op.move(source, targetDir);
+        op.move(source, outDir);
 
         assertFalse(Files.exists(source));
-        assertTrue(Files.exists(targetDir.resolve("toto.txt")));
+        assertTrue(Files.exists(outDir.resolve("toto.txt")));
     }
-
-//    @Test
-//    @Order(1)
-//    void setPathSource() {
-//        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-//        assertEquals(Path.of("target/temp/dumpfile.txt"),operationFichier.getPathSource());
-//    }
-
-//    @Test
-//    @Order(2)
-//    void rechercheCible() {
-//        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-//        Catalog catalogue = mock(Catalog.class);
-//        when(catalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
-//        assertEquals("target/temp2/", operationFichier.rechercheCible(catalogue));
-//
-//    }
-
-
-//    public String rechercheCible(Catalogue catalogue) {
-//        String dossierCible = catalogue.searchTargetDirectory(pathSource.getFileName().toString());
-//        if (dossierCible != null) pathCible = Path.of(dossierCible+pathSource.getFileName().toString());
-//        return dossierCible;
-//    }
-
-//    @Test
-//    @Order(3)
-//    void deplacement() {
-//        operationFichier.deplacement();
-//        File file = new File(TEMP_DIR2+"/"+FILE_NAME);
-//        assertTrue(file.exists());
-//        File file2 = new File(TEMP_DIR+"/"+FILE_NAME);
-//        assertFalse(file2.exists());
-//    }
-
-//    @Test
-//    void testDeplacementFichierInexistant() {
-//        operationFichier.setPathSource(Path.of("target/temp/inexistant.txt"));
-//        assertThrows(
-//                FileMoveException.class,
-//                operationFichier::deplacement
-//        );
-//    }
-
-//    @Test
-//    void testPathCibleCorrect() {
-//        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-//        when(mockCatalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
-//        operationFichier.rechercheCible(mockCatalogue);
-//       assertEquals(Path.of("target/temp2", FILE_NAME), operationFichier.getPathCible());
-//    }
-
-//    @Test
-//    void testRechercheCibleNull() {
-//        operationFichier.setPathSource(Path.of(TEMP_DIR + "/" + FILE_NAME));
-//        when(mockCatalogue.searchTargetDirectory(any())).thenReturn(null);
-//        String result = operationFichier.rechercheCible(mockCatalogue);
-//        assertNull(result);
-//        assertThrows(
-//                FileMoveException.class,
-//                operationFichier::deplacement
-//        );
-//    }
-//    @Test
-//    void testDeplacementMultiple() throws IOException {
-//        File file1 = new File(TEMP_DIR, "file1.txt");
-//        File file2 = new File(TEMP_DIR, "file2.txt");
-//        file1.createNewFile();
-//        file2.createNewFile();
-//
-//        when(mockCatalogue.searchTargetDirectory(any())).thenReturn("target/temp2/");
-//        operationFichier.setPathSource(file1.toPath());
-//        operationFichier.rechercheCible(mockCatalogue);
-//        operationFichier.deplacement();
-//
-//        operationFichier.setPathSource(file2.toPath());
-//        operationFichier.rechercheCible(mockCatalogue);
-//        operationFichier.deplacement();
-//
-//        assertTrue(new File(TEMP_DIR2, "file1.txt").exists());
-//        assertTrue(new File(TEMP_DIR2, "file2.txt").exists());
-//    }
-
 }
