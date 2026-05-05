@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.rangerfichier.domain.Catalog;
 import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
+import org.heyner.rangerfichier.infrastructure.config.ParameterFactory;
 import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 import org.heyner.rangerfichier.infrastructure.sgbd.RuleRepositoryAdapter;
 import view.OptionPaneUI;
@@ -27,6 +28,7 @@ public class RangerFichierApp {
 
     public static void main(String[] args) {
         ParameterFactory parameterFactory = new ParameterFactory();
+        parameterFactory.load();
         Parameter parametres = parameterFactory.getParameter();
         logger.info("RangerFichier v{}", parametres.getVersion());
 

@@ -7,6 +7,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -37,6 +42,18 @@ class OperationFichierTest {
         directory1.delete();
         File directory2 = new File(String.valueOf(TEMP_DIR));
         directory2.delete();
+    }
+
+    @Test
+    void moveShouldTransferFileToTargetDirectory() throws IOException {
+        Path source = Path.of("target/temp/in/toto.txt");
+        Path targetDir = Path.of("target/temp/out");
+
+        OperationFichier op = new OperationFichier();
+        op.move(source, targetDir);
+
+        assertFalse(Files.exists(source));
+        assertTrue(Files.exists(targetDir.resolve("toto.txt")));
     }
 
 //    @Test

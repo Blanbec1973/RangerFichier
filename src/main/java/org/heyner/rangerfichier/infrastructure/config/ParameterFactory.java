@@ -1,4 +1,4 @@
-package org.heyner.rangerfichier.bootstrap;
+package org.heyner.rangerfichier.infrastructure.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ public class ParameterFactory {
         return parameter;
     }
 
-    ParameterFactory() {
+    public void load() {
         boolean loaded = false;
         try {
             logger.debug("Début try");

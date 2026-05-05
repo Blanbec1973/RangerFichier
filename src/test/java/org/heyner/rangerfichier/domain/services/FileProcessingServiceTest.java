@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -101,10 +102,10 @@ class FileProcessingServiceTest {
         doReturn(mockOp).when(fps).createOperationFichier();
 
         // IMPORTANT :
-        doNothing().when(mockOp).setPathSource(any());
+        //doNothing().when(mockOp).setPathSource(any());
         when(mockCatalog.searchTargetDirectory(anyString())).thenReturn(Optional.of("/tmp/"));
         //when(mockOp.rechercheCible(mockCatalog)).thenReturn("/tmp/");
-        when(mockOp.deplacement()).thenReturn(true);
+        doNothing().when(mockOp).move(any(Path.class), any(Path.class));
 
         fps.processFiles(new String[]{"doc.txt"});
 

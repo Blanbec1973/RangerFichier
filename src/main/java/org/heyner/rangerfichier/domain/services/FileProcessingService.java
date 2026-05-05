@@ -3,8 +3,10 @@ package org.heyner.rangerfichier.domain.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.rangerfichier.domain.Catalog;
+import org.heyner.rangerfichier.shared.util.PathNormalizer;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 public class FileProcessingService {
@@ -32,8 +34,9 @@ public class FileProcessingService {
 
         for (String filePath : filePaths) {
             OperationFichier operationFichier = createOperationFichier();
-            operationFichier.setPathSource(Path.of(filePath));
-            String fileName = Path.of(filePath).getFileName().toString();
+            //operationFichier.setPathSource(Path.of(filePath));
+            Path source = Path.of(filePath);
+            String fileName = source.getFileName().toString();
             Optional<String> targetDirectory = catalog.searchTargetDirectory(fileName);
             //String dossierCible = operationFichier.rechercheCible(catalog);
 
@@ -44,8 +47,10 @@ public class FileProcessingService {
             } else {
                 logger.info("Chemin cible : {}", targetDirectory);
                 try {
-                    operationFichier.setPathCible(Path.of(targetDirectory.get()));
-                    operationFichier.deplacement();
+                    Path destinationDirectory = PathNormalizer.normalize(targetDirectory.get());
+                    operationFichier.move(source, destinationDirectory);
+                    //operationFichier.setPathCible(Path.of(targetDirectory.get()));
+                    //operationFichier.deplacement();
                     reportService.append("Déplacé : ")
                             .append(filePath)
                             .append(" -> ")
