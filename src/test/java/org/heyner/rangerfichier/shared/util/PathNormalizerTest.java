@@ -1,6 +1,7 @@
 package org.heyner.rangerfichier.shared.util;
 
 import org.junit.jupiter.api.Test;
+
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,36 +10,42 @@ class PathNormalizerTest {
 
     @Test
     void normalizeWithUserProfile() {
-        String oldUserHome = System.getProperty("user.home");
-        try {
-            System.setProperty("user.home", "C:/Users/testuser");
+        PathNormalizer normalizer = new PathNormalizer(() -> "C:/Users/testuser");
 
-            Path expected = Path.of("C:/Users/testuser", "Downloads", "Test");
-            Path actual = PathNormalizer.normalize("%USERPROFILE%/Downloads/Test");
+        Path expected = Path.of("C:/Users/testuser", "Downloads", "Test");
+        Path actual = normalizer.normalize("%USERPROFILE%/Downloads/Test");
 
-            assertEquals(expected, actual);
-        } finally {
-            System.setProperty("user.home", oldUserHome);
-        }
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void normalizeWithTilde() {
+        PathNormalizer normalizer = new PathNormalizer(() -> "C:/Users/testuser");
+
+        Path expected = Path.of("C:/Users/testuser", "Downloads", "Test");
+        Path actual = normalizer.normalize("~/Downloads/Test");
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void normalizeWithoutVariable() {
-        String raw = "C:/Temp/Test";
-        Path path = PathNormalizer.normalize(raw);
+        PathNormalizer normalizer = new PathNormalizer(() -> "C:/Users/testuser");
 
-        assertEquals(Path.of("C:/Temp/Test"), path);
+        assertEquals(Path.of("C:/Temp/Test"), normalizer.normalize("C:/Temp/Test"));
     }
 
     @Test
     void normalizeNullThrowsException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> PathNormalizer.normalize(null));
+        PathNormalizer normalizer = new PathNormalizer(() -> "C:/Users/testuser");
+
+        assertThrows(IllegalArgumentException.class, () -> normalizer.normalize(null));
     }
 
     @Test
     void normalizeEmptyThrowsException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> PathNormalizer.normalize(" "));
+        PathNormalizer normalizer = new PathNormalizer(() -> "C:/Users/testuser");
+
+        assertThrows(IllegalArgumentException.class, () -> normalizer.normalize(" "));
     }
 }

@@ -3,6 +3,7 @@ package org.heyner.rangerfichier.domain.services;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.heyner.rangerfichier.domain.Catalog;
+import org.heyner.rangerfichier.shared.exceptions.FileMoveException;
 import org.heyner.rangerfichier.shared.util.PathNormalizer;
 
 import java.nio.file.Path;
@@ -42,7 +43,8 @@ public class FileProcessingService {
             } else {
                 logger.info("Chemin cible : {}", targetDirectory);
                 try {
-                    Path targetDirectory2 = PathNormalizer.normalize(targetDirectory.get());
+                    PathNormalizer normalizer = new PathNormalizer(() -> System.getProperty("user.home"));
+                    Path targetDirectory2 = normalizer.normalize(targetDirectory.get());
                     operationFichier.move(source, targetDirectory2);
                     reportBuilder.append("Déplacé : ")
                             .append(filePath)
@@ -51,7 +53,7 @@ public class FileProcessingService {
                             .append("\n");
                     logger.info("Déplacé vers : {}", targetDirectory);
                     nbDeplacements++;
-                } catch (Exception e) {
+                } catch (FileMoveException e) {
                     reportBuilder.append("ERREUR : ")
                             .append(filePath)
                             .append(" -> ")
