@@ -22,6 +22,9 @@ public class RuleRepositoryAdapter implements RuleRepositoryPort {
 
     @Override
     public List<Rule> findAllRules() {
+        if (connexion.getConn() == null) {
+            throw new DatabaseAccessException("Connection is not initialized.", null);
+        }
         List<Rule> rules = new ArrayList<>();
         String sql = parameters.getProperty("sql");
         try (Statement stmt = connexion.getConn().createStatement();

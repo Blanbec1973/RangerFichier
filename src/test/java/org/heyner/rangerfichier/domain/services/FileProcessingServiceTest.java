@@ -31,7 +31,7 @@ class FileProcessingServiceTest {
 
     @Test
     void testProcessFiles_NoMatch() {
-        ReportBuilder mockReport = mock(ReportBuilder.class);
+        ReportAccumulator mockReport = mock(ReportAccumulator.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
         PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
@@ -43,12 +43,12 @@ class FileProcessingServiceTest {
 
         verify(mockReport).append("Pas de correspondance pour : ");
         verify(mockReport).append("toto.pdf");
-        verify(mockReport).addTotalReport(0);
+        verify(mockReport).addSummary(0);
     }
 
     @Test
     void testProcessFiles_MoveSuccess() {
-        ReportBuilder mockReport = mock(ReportBuilder.class);
+        ReportAccumulator mockReport = mock(ReportAccumulator.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
         PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);
@@ -63,12 +63,12 @@ class FileProcessingServiceTest {
         fps.processFiles(new String[]{"doc.txt"});
 
         verify(mockReport).append("Déplacé : ");
-        verify(mockReport).addTotalReport(1);
+        verify(mockReport).addSummary(1);
     }
 
     @Test
     void testGetReport() {
-        ReportBuilder mockReport = mock(ReportBuilder.class);
+        ReportAccumulator mockReport = mock(ReportAccumulator.class);
         Catalog mockCatalog = mock(Catalog.class);
         OperationFichier mockOperationFichier = mock(OperationFichier.class);
         PathNormalizer mockPathNormalizer = mock(PathNormalizer.class);

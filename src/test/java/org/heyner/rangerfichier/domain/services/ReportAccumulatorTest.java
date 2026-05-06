@@ -4,39 +4,39 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ReportBuilderTest {
+class ReportAccumulatorTest {
 
     @Test
     void append_shouldConcatenateText_andReturnSameInstance() {
-        ReportBuilder rb = new ReportBuilder();
+        ReportAccumulator rb = new ReportAccumulator();
 
-        ReportBuilder returned = rb.append("Hello ").append("World");
+        ReportAccumulator returned = rb.append("Hello ").append("World");
 
         assertSame(rb, returned, "append() doit retourner la même instance (fluent)");
         assertEquals("Hello World", rb.getReport());
     }
 
     @Test
-    void addTotalReport_whenZero_shouldAppendNoFileMovedMessage() {
-        ReportBuilder rb = new ReportBuilder();
+    void addSummary_whenZero_shouldAppendNoFileMovedMessage() {
+        ReportAccumulator rb = new ReportAccumulator();
 
-        rb.addTotalReport(0);
+        rb.addSummary(0);
 
         assertEquals("Aucun fichier déplacé.", rb.getReport());
     }
 
     @Test
-    void addTotalReport_whenPositive_shouldAppendCountMessage() {
-        ReportBuilder rb = new ReportBuilder();
+    void addSummary_whenPositive_shouldAppendCountMessage() {
+        ReportAccumulator rb = new ReportAccumulator();
 
-        rb.addTotalReport(3);
+        rb.addSummary(3);
 
         assertEquals("3 fichier(s) déplacé(s).", rb.getReport());
     }
 
     @Test
     void clear_shouldResetReport() {
-        ReportBuilder rb = new ReportBuilder();
+        ReportAccumulator rb = new ReportAccumulator();
         rb.append("something");
 
         rb.clear();

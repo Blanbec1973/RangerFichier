@@ -19,11 +19,14 @@ public class Catalog {
     public Optional<String> searchTargetDirectory(String fileName) {
         logger.info("File to parse with regexes : {}", fileName);
 
-        return rules.stream()
+        Optional<Rule> matchedRule = rules.stream()
                 .filter(rule -> fileName.matches(rule.regex()))
-                .peek(rule -> logger.info("Matched regex: {}", rule.regex()))
-                .map(Rule::targetDirectory)
                 .findFirst();
+
+        matchedRule.ifPresent(rule ->
+                logger.info("Matched regex: {}", rule.regex()));
+
+        return matchedRule.map(Rule::targetDirectory);
     }
 
     public int getSize() {

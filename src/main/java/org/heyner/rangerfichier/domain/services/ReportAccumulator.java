@@ -1,14 +1,14 @@
 package org.heyner.rangerfichier.domain.services;
 
-public class ReportBuilder {
+public class ReportAccumulator {
     private final StringBuilder report = new StringBuilder();
 
-    public ReportBuilder append(String text) {
+    public ReportAccumulator append(String text) {
         report.append(text);
         return this;
     }
 
-    public void addTotalReport(int moveCounter) {
+    public void addSummary(int moveCounter) {
         if (moveCounter == 0) {
             report.append("Aucun fichier déplacé.");
         } else {

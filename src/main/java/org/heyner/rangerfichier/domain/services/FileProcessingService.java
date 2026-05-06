@@ -13,14 +13,14 @@ public class FileProcessingService {
     private static final Logger logger = LogManager.getLogger(FileProcessingService.class);
 
     private final Catalog catalog;
-    private final ReportBuilder reportBuilder;
+    private final ReportAccumulator reportAccumulator;
     private final OperationFichier operationFichier;
     private final PathNormalizer pathNormalizer;
 
     public FileProcessingService(Catalog catalog,
-                                 ReportBuilder reportBuilder, OperationFichier operationFichier, PathNormalizer pathNormalizer) {
+                                 ReportAccumulator reportAccumulator, OperationFichier operationFichier, PathNormalizer pathNormalizer) {
         this.catalog = catalog;
-        this.reportBuilder = reportBuilder;
+        this.reportAccumulator = reportAccumulator;
         this.operationFichier = operationFichier;
         this.pathNormalizer = pathNormalizer;
     }
@@ -37,34 +37,42 @@ public class FileProcessingService {
             Optional<String> targetDirectory = catalog.searchTargetDirectory(fileName);
 
             if (targetDirectory.isEmpty()) {
-                reportBuilder.append("Pas de correspondance pour : ").append(filePath).append("\n");
+                reportAccumulator.append("Pas de correspondance pour : ").append(filePath).append("\n");
                 logger.warn("Pas de correspondance trouvée pour {}", filePath);
             } else {
                 logger.info("Target directory : {}", targetDirectory.get());
                 try {
                     Path targetDirectory2 = pathNormalizer.normalize(targetDirectory.get());
                     operationFichier.move(source, targetDirectory2);
-                    reportBuilder.append("Déplacé : ")
-                            .append(filePath)
-                            .append(" -> ")
-                            .append(targetDirectory.toString())
-                            .append("\n");
+                    appendMoveReport(filePath, targetDirectory.get());
                     logger.info("Moved to : {}", targetDirectory.get());
                     nbDeplacements++;
                 } catch (FileMoveException e) {
-                    reportBuilder.append("ERREUR : ")
-                            .append(filePath)
-                            .append(" -> ")
-                            .append(e.getMessage())
-                            .append("\n");
+                    appendErrorReport(filePath, e);
                     logger.error("Déplacement échoué pour {}", filePath, e);
                 }
             }
         }
-        reportBuilder.addTotalReport(nbDeplacements);
+        reportAccumulator.addSummary(nbDeplacements);
 
     }
 
-    public String getReport() { return reportBuilder.getReport();
+    private void appendErrorReport(String filePath, FileMoveException e) {
+        reportAccumulator.append("ERREUR : ")
+                .append(filePath)
+                .append(" -> ")
+                .append(e.getMessage())
+                .append("\n");
+    }
+
+    private void appendMoveReport(String filePath, String targetDirectory) {
+        reportAccumulator.append("Déplacé : ")
+                .append(filePath)
+                .append(" -> ")
+                .append(targetDirectory)
+                .append("\n");
+    }
+
+    public String getReport() { return reportAccumulator.getReport();
     }
 }

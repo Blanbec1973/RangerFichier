@@ -2,6 +2,7 @@ package org.heyner.rangerfichier.bootstrap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.heyner.rangerfichier.shared.exceptions.DatabaseAccessException;
 import ui.UserInterface;
 import org.heyner.rangerfichier.domain.services.FileProcessingService;
 import org.heyner.common.Parameter;
@@ -21,14 +22,14 @@ public class RangerFichierApp {
     public static void main(String[] args) {
 
         // Injection manuelle
-        RangerFichierApp app = new BootStrap().createApp();
-        app.run(args);
+        RangerFichierApp app = new Bootstrap().createApp();
+        app.execute(args);
     }
 
     /**
      * Méthode testable qui contient la logique principale.
      */
-     void run(String[] args) {
+     void execute(String[] args) {
         if (args == null || args.length == 0) {
             String msg = parameter.getProperty("MsgErrNoFile");
             logger.error(msg);
@@ -40,7 +41,7 @@ public class RangerFichierApp {
             service.processFiles(args);
             String report = service.getReport();
             ui.showMessage(report);
-        } catch (Exception e) {
+        } catch (DatabaseAccessException e) {
             logger.fatal("Erreur critique", e);
             ui.showMessage("Erreur critique : " + e.getMessage());
         }

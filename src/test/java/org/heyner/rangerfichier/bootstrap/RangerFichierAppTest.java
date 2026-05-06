@@ -47,35 +47,35 @@ class RangerFichierAppTest {
     }
 
     @Test
-    void testRunWithNoArgs() {
+    void testExecuteWithNoArgs() {
         UserInterface mockUI = mock(UserInterface.class);
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
         when(mockParam.getProperty("MsgErrNoFile")).thenReturn("Arguments manquants");
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-        app.run(new String[]{});
+        app.execute(new String[]{});
 
         verify(mockUI).showMessage("Arguments manquants");
         verifyNoInteractions(mockService);
     }
 
     @Test
-    void testRunWithNullArgs() {
+    void testExecuteWithNullArgs() {
         UserInterface mockUI = mock(UserInterface.class);
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
         when(mockParam.getProperty("MsgErrNoFile")).thenReturn("Arguments manquants");
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-        app.run(null);
+        app.execute(null);
 
         verify(mockUI).showMessage("Arguments manquants");
         verifyNoInteractions(mockService);
     }
 
     @Test
-    void testRunWithArgsSuccess() {
+    void testExecuteWithArgsSuccess() {
         UserInterface mockUI = mock(UserInterface.class);
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
@@ -83,14 +83,14 @@ class RangerFichierAppTest {
         when(mockService.getReport()).thenReturn("Report OK");
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-        app.run(new String[]{"file.txt"});
+        app.execute(new String[]{"file.txt"});
 
         verify(mockService).processFiles(any());
         verify(mockUI).showMessage("Report OK");
     }
 
     @Test
-    void testRunWithNoRulesFound() {
+    void testExecuteWithNoRulesFound() {
         UserInterface mockUI = mock(UserInterface.class);
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
@@ -99,14 +99,14 @@ class RangerFichierAppTest {
         when(mockService.getReport()).thenReturn(reportWithNoMatch);
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-        app.run(new String[]{"file.txt"});
+        app.execute(new String[]{"file.txt"});
 
         verify(mockService).processFiles(any());
         verify(mockUI).showMessage(reportWithNoMatch);
     }
 
     @Test
-    void testRunWithSuccessfulFileMove() {
+    void testExecuteWithSuccessfulFileMove() {
         UserInterface mockUI = mock(UserInterface.class);
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
@@ -116,14 +116,14 @@ class RangerFichierAppTest {
         when(mockService.getReport()).thenReturn(successReport);
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-        app.run(new String[]{testFilePath});
+        app.execute(new String[]{testFilePath});
 
         verify(mockService).processFiles(any());
         verify(mockUI).showMessage(successReport);
     }
 
     @Test
-    void testRunWithFailedFileMove() {
+    void testExecuteWithFailedFileMove() {
         UserInterface mockUI = mock(UserInterface.class);
         FileProcessingService mockService = mock(FileProcessingService.class);
         Parameter mockParam = mock(Parameter.class);
@@ -133,7 +133,7 @@ class RangerFichierAppTest {
         when(mockService.getReport()).thenReturn(errorReport);
 
         RangerFichierApp app = new RangerFichierApp(mockUI, mockService, mockParam);
-        app.run(new String[]{testFilePath});
+        app.execute(new String[]{testFilePath});
 
         verify(mockService).processFiles(any());
         verify(mockUI).showMessage(errorReport);

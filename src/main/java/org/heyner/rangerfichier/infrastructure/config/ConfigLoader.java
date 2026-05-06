@@ -34,8 +34,7 @@ public class ConfigLoader {
                 logger.debug("loaded : {}", loaded);
             }
         } catch (URISyntaxException e) {
-            logger.error("Erreur lecture fichier config proche jar.");
-            throw new RuntimeException(e);
+            logger.warn("Erreur lecture fichier config proche jar.");
         }
 
         if (!loaded) {

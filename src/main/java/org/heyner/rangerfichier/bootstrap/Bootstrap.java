@@ -7,7 +7,7 @@ import org.heyner.rangerfichier.domain.Catalog;
 import org.heyner.rangerfichier.domain.ports.RuleRepositoryPort;
 import org.heyner.rangerfichier.domain.services.FileProcessingService;
 import org.heyner.rangerfichier.domain.services.OperationFichier;
-import org.heyner.rangerfichier.domain.services.ReportBuilder;
+import org.heyner.rangerfichier.domain.services.ReportAccumulator;
 import org.heyner.rangerfichier.infrastructure.config.ConfigLoader;
 import org.heyner.rangerfichier.infrastructure.sgbd.Connexion;
 import org.heyner.rangerfichier.infrastructure.sgbd.RuleRepositoryAdapter;
@@ -15,8 +15,8 @@ import org.heyner.rangerfichier.shared.util.PathNormalizer;
 import ui.OptionPaneUI;
 import ui.UserInterface;
 
-public class BootStrap {
-    private static final Logger logger = LogManager.getLogger(BootStrap.class);
+public class Bootstrap {
+    private static final Logger logger = LogManager.getLogger(Bootstrap.class);
 
     public RangerFichierApp createApp() {
         ConfigLoader configLoader = new ConfigLoader();
@@ -27,16 +27,17 @@ public class BootStrap {
 
         UserInterface ui = new OptionPaneUI();
         try (Connexion connexion = new Connexion(parameters.getProperty("url"))) {
+            connexion.connect();
             RuleRepositoryPort ruleRepositoryPort = new RuleRepositoryAdapter(parameters,
                     connexion);
             catalog = new Catalog(ruleRepositoryPort.findAllRules());
         }
 
-        ReportBuilder reportBuilder = new ReportBuilder();
+        ReportAccumulator reportAccumulator = new ReportAccumulator();
         OperationFichier operationFichier = new OperationFichier();
-        PathNormalizer normalizer = new PathNormalizer(() -> System.getProperty("user.home"));
+        PathNormalizer normalizer = new PathNormalizer(new PathNormalizer.SystemHomeProvider());
         FileProcessingService service = new FileProcessingService(catalog,
-                reportBuilder,
+                reportAccumulator,
                 operationFichier,
                 normalizer);
 

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class BootStrapTest {
+class BootstrapTest {
 
     @Test
     void createApp_shouldBuildAndReturnApp() {
@@ -41,7 +41,7 @@ class BootStrapTest {
              MockedConstruction<RuleRepositoryAdapter> mockedRepoAdapter =
                      mockConstruction(RuleRepositoryAdapter.class, (mock, context) -> when(mock.findAllRules()).thenReturn(Collections.emptyList()))
         ) {
-            BootStrap bootStrap = new BootStrap();
+            Bootstrap bootStrap = new Bootstrap();
 
             // Act
             RangerFichierApp app = bootStrap.createApp();
